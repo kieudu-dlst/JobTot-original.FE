@@ -1,0 +1,85 @@
+/* Keep the Companies appearance independent of the surrounding page styles. */
+.career-tools.career-tools {
+  width: 100%;
+  max-width: 1184px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.career-tools.career-tools h2 {
+  color: #334155;
+}
+
+.career-tools.career-tools svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.career-tools.career-tools button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.career-tools.career-tools button:focus-visible {
+  outline: 3px solid #ffad8b;
+  outline-offset: 3px;
+}
+
+.career-tools.career-tools {
+  margin-top: var(--space-section, 64px);
+  font-family: inherit;
+}
+.career-tools.career-tools h2 {
+  font-size: var(--text-section, 24px);
+  line-height: 1.45;
+  color: var(--ui-ink, #172b43);
+}
+.career-tools.career-tools > div:first-child > p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ui-muted, #5d6d82);
+}
+.career-tools.career-tools [data-slot="card"] {
+  height: auto;
+  min-height: 300px;
+  padding: var(--space-card, 24px);
+  border-color: var(--ui-border, #e1e7ef);
+  border-radius: 16px;
+}
+.career-tools.career-tools [data-slot="card"] h3 {
+  font-size: 16px;
+  line-height: 1.55;
+  letter-spacing: -0.015em;
+}
+.career-tools.career-tools [data-slot="card"] p {
+  min-height: 0;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ui-muted, #5d6d82);
+}
+.career-tools.career-tools [data-slot="card"] > a {
+  height: auto;
+  min-height: 44px;
+  font-size: 14px;
+  color: var(--ui-brand, #d4451b);
+}
+@media (max-width: 600px) {
+  .career-tools.career-tools > div:last-child {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .career-tools.career-tools [data-slot="card"] {
+    min-height: 0;
+  }
+  .career-tools.career-tools [data-slot="card"] p br {
+    display: none;
+  }
+}

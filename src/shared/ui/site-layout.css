@@ -1,0 +1,35 @@
+/* Every page using the shared footer, including loading and empty states. */
+.site-page,
+div:has(> .site-footer) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.site-page > main,
+div:has(> .site-footer) > main {
+  flex-grow: 1;
+}
+
+.site-footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+div:has(> .site-footer) > header {
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .site-footer address > * {
+    min-width: 0;
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+  }
+  .site-footer address strong {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}

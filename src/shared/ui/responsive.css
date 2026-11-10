@@ -1,0 +1,156 @@
+/* Fluid sizes interpolate between phone and desktop; grids keep their own breakpoints. */
+:root {
+  --layout-gutter: clamp(1rem, 0.25rem + 3vw, 3.125rem);
+  --layout-bottom: clamp(2.5rem, 2rem + 2vw, 3.75rem);
+  --space-card: clamp(1rem, 0.75rem + 1vw, 1.5rem);
+  --space-grid: clamp(0.875rem, 0.625rem + 1vw, 1.5rem);
+  --space-section: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  --text-title: clamp(1.375rem, 1.05rem + 1.3vw, 2rem);
+  --text-section: clamp(1.125rem, 0.95rem + 0.7vw, 1.5rem);
+  --text-body: clamp(0.875rem, 0.825rem + 0.2vw, 1rem);
+  --header-height: clamp(4.625rem, 4.35rem + 1vw, 5.125rem);
+}
+
+.responsive-header {
+  height: var(--header-height);
+}
+.responsive-header .responsive-header-inner {
+  padding-inline: clamp(1rem, 0.625rem + 1.5vw, 2.125rem);
+  gap: clamp(0.5rem, 0.2rem + 1.5vw, 1.375rem);
+}
+div:has(> .site-footer) > main {
+  width: 100%;
+  min-width: 0;
+}
+.site-footer > div {
+  padding-inline: var(--layout-gutter);
+}
+.page-container > section,
+.page-container > form {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Page titles scale independently of body copy and data tables. */
+.page-container
+  :is(
+    .home-hero,
+    .jobs-hero,
+    .ti-hero,
+    .salary-hero,
+    .tools-hub-hero,
+    .bhtn-hero,
+    .bhxh-hero,
+    .company-intro,
+    .cv-catalog-hero,
+    .jd-hero,
+    .td-hero,
+    .ec-page-heading,
+    .cp-heading,
+    .mj-heading,
+    .chat-page-heading
+  )
+  h1,
+.articles-page .page-container > h1 {
+  font-size: var(--text-title);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.page-container
+  :is(
+    .company-section-heading,
+    .home-jobs-heading,
+    .tools-hub-section-heading,
+    .ti-section,
+    .ti-report,
+    .salary-explanation,
+    .salary-guides,
+    .tax-section-title,
+    .tax-comparison,
+    .bhtn-section-heading,
+    .bhxh-section-heading,
+    .cv-gallery-heading
+  )
+  h2 {
+  font-size: var(--text-section);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.page-container
+  :is(
+    .home-description,
+    .jobs-description,
+    .ti-hero-row > p,
+    .tools-hub-hero > p,
+    .salary-hero > p,
+    .bhtn-hero > p,
+    .bhxh-hero > p
+  ) {
+  font-size: var(--text-body);
+  line-height: 1.75;
+}
+
+.page-container
+  :is(
+    .salary-box,
+    .ti-industry,
+    .ti-report,
+    .tools-hub-card,
+    .tools-hub-cv-card,
+    .detail-panel,
+    .jd-panel,
+    .article-detail,
+    .article-editor
+  ) {
+  padding: var(--space-card);
+}
+.page-container
+  :is(
+    .company-featured-grid,
+    .company-article-grid,
+    .home-job-grid,
+    .ti-grid,
+    .ti-jobs,
+    .salary-calculator-grid,
+    .salary-step-grid,
+    .tools-hub-grid,
+    .tax-four-steps,
+    .article-catalog
+  ) {
+  gap: var(--space-grid);
+}
+.page-container :is(.ti-section, .salary-guides, .company-featured, .tools-hub-finance) {
+  margin-bottom: var(--space-section);
+}
+.page-container :is(.home-search, .jobs-search) {
+  margin-bottom: clamp(2.5rem, 1rem + 5vw, 5.875rem);
+}
+.page-container :is(.home-hero, .jobs-hero, .tools-hub-hero) {
+  padding-block: clamp(1.5rem, 0.75rem + 3vw, 3.5rem);
+}
+.page-container :is(.company-primary, .tools-hub-action, .ti-search > button) {
+  min-height: 44px;
+  padding: clamp(0.625rem, 0.5rem + 0.4vw, 0.875rem) clamp(0.875rem, 0.5rem + 1vw, 1.25rem);
+  font-size: clamp(0.8125rem, 0.75rem + 0.25vw, 0.9375rem);
+}
+.page-container :is(.salary-tax-table, .ti-table-wrap) {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 760px) {
+  /* Prevent automatic input zoom on phones while retaining the user's text zoom. */
+  .page-container
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  .page-container textarea,
+  .page-container select:not([multiple]):not([size]) {
+    font-size: 1rem;
+  }
+  .page-container :is(.salary-field, .company-search, .ti-search) input,
+  .page-container :is(.salary-field, .company-search, .ti-search) select {
+    min-height: 44px;
+  }
+  .page-container :is(.company-featured-grid, .company-article-grid, .article-catalog) > * {
+    min-width: 0;
+  }
+}

@@ -1,0 +1,335 @@
+.mj-applied-card {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e0e6ec;
+  border-radius: 12px;
+  min-width: 0;
+}
+.mj-applied-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.mj-applied-logo {
+  display: grid;
+  place-items: center;
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  border: 1px solid #e6edfb;
+  border-radius: 10px;
+  background: #eff4ff;
+  color: #2396c9;
+  overflow: hidden;
+}
+.mj-applied-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.mj-applied-logo svg {
+  width: 26px;
+  height: 26px;
+}
+.mj-applied-identity {
+  flex: 1;
+  min-width: 0;
+}
+.mj-applied-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.mj-applied-title h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #26364a;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.mj-applied-status,
+.mj-applied-hiring {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ecfcf5;
+  color: #25bd91;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.mj-applied-status svg,
+.mj-applied-hiring svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.mj-applied-status.is-stopped {
+  background: #fff0ef;
+  color: #d76158;
+}
+.mj-applied-hiring {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 9px;
+}
+.mj-applied-hiring.is-closed {
+  background: #f0f2f5;
+  color: #8994a7;
+}
+.mj-applied-company {
+  font-size: 13px;
+  color: #657286;
+  display: inline-block;
+  margin-bottom: 3px;
+}
+.mj-applied-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #8994a7;
+}
+.mj-applied-meta strong {
+  color: #ff602e;
+  font-weight: 600;
+}
+.mj-applied-meta > span:last-child {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+  min-width: 0;
+}
+.mj-applied-meta svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.mj-applied-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #8994a7;
+}
+.mj-applied-date svg {
+  width: 13px;
+  height: 13px;
+}
+.mj-application-progress {
+  padding: 14px;
+  background: #f4f7ff;
+  border-radius: 9px;
+  margin-bottom: 18px;
+}
+.mj-application-progress-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 11px;
+  font-size: 11px;
+}
+.mj-application-progress-heading h3 {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  color: #526177;
+  font-weight: 600;
+}
+.mj-application-progress-heading svg {
+  width: 14px;
+  height: 14px;
+  color: #ff602e;
+}
+.mj-application-progress-heading > span {
+  color: #22be91;
+  font-weight: 600;
+  text-align: right;
+}
+.mj-application-progress.is-stopped .mj-application-progress-heading > span {
+  color: #d76158;
+}
+.mj-application-progress-track {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+}
+.mj-application-progress-track > div {
+  min-width: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #a4adbd;
+}
+.mj-application-progress-track i {
+  display: block;
+  height: 7px;
+  border-radius: 5px;
+  background: #d9dde6;
+  margin-bottom: 6px;
+}
+.mj-application-progress-track span {
+  display: block;
+}
+.mj-application-progress-track .is-done {
+  color: #20ba8d;
+}
+.mj-application-progress-track .is-done i {
+  background: #1bc393;
+}
+.mj-application-progress-track .is-current {
+  color: #ff602e;
+}
+.mj-application-progress-track .is-current i {
+  background: #ff602e;
+}
+.mj-application-progress.is-stopped .is-current {
+  color: #d76158;
+}
+.mj-application-progress.is-stopped .is-current i {
+  background: #d76158;
+}
+.mj-applied-actions {
+  display: flex;
+  font-size: 11px;
+  color: #8994a7;
+}
+.mj-applied-actions a {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.mj-applied-actions svg {
+  width: 14px;
+  height: 14px;
+}
+.mj-upcoming-interview-card {
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #e0e6ec;
+  border-radius: 12px;
+}
+.mj-upcoming-interview-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.mj-upcoming-interview-card h2 > span {
+  font-size: 13px;
+  color: #ff602e;
+}
+.mj-upcoming-interview-card h2 > small {
+  margin-left: auto;
+  background: #fff3ec;
+  color: #ff602e;
+  border-radius: 4px;
+  font-size: 9px;
+  padding: 3px 5px;
+  white-space: nowrap;
+}
+.mj-upcoming-interview-detail {
+  padding: 14px;
+  background: linear-gradient(135deg, #fff, #f0f4ff);
+  border: 1px solid #edf1fa;
+  border-radius: 9px;
+}
+.mj-upcoming-interview-detail h3 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  color: #26364a;
+}
+.mj-upcoming-interview-detail > p {
+  font-size: 11px;
+  color: #8994a7;
+}
+.mj-upcoming-interview-detail .mj-upcoming-interview-time {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  color: #ff602e;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 9px;
+  flex-wrap: wrap;
+}
+.mj-upcoming-interview-time svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.mj-upcoming-interview-detail .mj-upcoming-interview-mode {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #657286;
+  overflow-wrap: anywhere;
+}
+.mj-upcoming-interview-mode svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #3998c9;
+}
+.mj-upcoming-interview-schedule {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #ff602e;
+  margin-top: 10px;
+}
+.mj-workspace-applied {
+  min-height: 0;
+  padding-bottom: 100px;
+}
+@media (max-width: 1100px) {
+  .mj-applied-heading {
+    flex-wrap: wrap;
+  }
+  .mj-applied-identity {
+    flex: 1 0 calc(100% - 68px);
+  }
+  .mj-applied-hiring {
+    margin-left: 68px;
+  }
+}
+@media (max-width: 500px) {
+  .mj-applied-card {
+    padding: 16px;
+  }
+  .mj-applied-title h2 {
+    font-size: 14px;
+  }
+  .mj-application-progress {
+    padding: 11px;
+  }
+  .mj-application-progress-track {
+    gap: 4px;
+  }
+  .mj-application-progress-track > div {
+    font-size: 9px;
+  }
+  .mj-application-progress-heading {
+    align-items: flex-start;
+    font-size: 10px;
+  }
+  .mj-workspace-applied {
+    padding-bottom: 40px;
+  }
+}

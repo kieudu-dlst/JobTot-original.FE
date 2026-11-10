@@ -1,0 +1,113 @@
+.toast-region {
+  position: fixed;
+  top: 98px;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(420px, calc(100vw - 32px));
+  pointer-events: none;
+  font-family: "Roboto", sans-serif;
+}
+.app-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #10b981;
+  border-radius: 10px;
+  color: #334155;
+  box-shadow: 0 8px 32px #0f172a24;
+  pointer-events: auto;
+  animation: toast-enter 0.2s ease-out;
+}
+.toast-icon {
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+  color: #10b981;
+}
+.toast-content {
+  flex: 1;
+  min-width: 0;
+}
+.toast-content p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.toast-content a {
+  display: inline-block;
+  color: #ff602e;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 6px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.app-toast > button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  color: #94a3b8;
+  cursor: pointer;
+}
+.app-toast > button:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+.app-toast > button svg {
+  width: 17px;
+  height: 17px;
+}
+.app-toast-error {
+  border-left-color: #ef4444;
+}
+.app-toast-error .toast-icon {
+  color: #ef4444;
+}
+.app-toast-info {
+  border-left-color: #ff602e;
+}
+.app-toast-info .toast-icon {
+  color: #ff602e;
+}
+.app-toast button:focus-visible,
+.app-toast a:focus-visible {
+  outline: 2px solid #ff602e;
+  outline-offset: 3px;
+}
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 600px) {
+  .toast-region {
+    top: 86px;
+    right: 16px;
+  }
+  .app-toast {
+    padding: 13px;
+  }
+  .toast-content p {
+    font-size: 13px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-toast {
+    animation: none;
+  }
+}

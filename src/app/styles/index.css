@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/latin-700.css";
+@import "@fontsource/inter/latin-800.css";
+@import "@fontsource/inter/vietnamese-400.css";
+@import "@fontsource/inter/vietnamese-500.css";
+@import "@fontsource/inter/vietnamese-600.css";
+@import "@fontsource/inter/vietnamese-700.css";
+@import "@fontsource/inter/vietnamese-800.css";
+@import "@fontsource/roboto/latin-400.css";
+@import "@fontsource/roboto/latin-500.css";
+@import "@fontsource/roboto/latin-700.css";
+@import "@fontsource/roboto/latin-400-italic.css";
+@import "@fontsource/roboto/vietnamese-400.css";
+@import "@fontsource/roboto/vietnamese-500.css";
+@import "@fontsource/roboto/vietnamese-700.css";
+@import "@fontsource/roboto/vietnamese-400-italic.css";
+
+@theme inline {
+  --font-inter: "Inter", sans-serif;
+  --font-roboto: "Inter", "Roboto", sans-serif;
+  /* Brand */
+  --color-auth-orange: #d33c32;
+  --color-auth-brand-hover: #b92f27;
+  --color-auth-brand-strong: #db430c;
+  --color-auth-brand-focus: #ff875a;
+
+  /* Surfaces */
+  --color-auth-surface-page: #f7f9fb;
+  --color-auth-surface-tabs: #f7f8fa;
+  --color-auth-surface-input: #f8fafc;
+  --color-auth-surface-brand: #fff3ed;
+  --color-auth-surface-brand-soft: #fff4ee;
+  --color-auth-surface-brand-badge: #ffddd0;
+  --color-auth-surface-footer: #1e293b;
+
+  /* Text */
+  --color-auth-ink: #102235;
+  --color-auth-muted: #5c6c80;
+  --color-auth-text-tab: #667087;
+  --color-auth-text-selected: #263747;
+  --color-auth-text-nav: #626c82;
+  --color-auth-text-secondary: #778197;
+  --color-auth-text-divider: #778198;
+  --color-auth-text-icon: #6a748a;
+  --color-auth-text-input: #28384f;
+  --color-auth-text-placeholder: #8995ab;
+  --color-auth-text-caption: #737d92;
+  --color-auth-text-body: #707a90;
+  --color-auth-text-description: #737c90;
+  --color-auth-text-header: #56617a;
+  --color-auth-text-brand: #b8522c;
+  --color-auth-text-footer: #aeb8cb;
+  --color-auth-text-footer-heading: #f0f2f6;
+  --color-auth-text-footer-link: #d5dce7;
+
+  /* Borders */
+  --color-auth-border: #e2e9f2;
+  --color-auth-border-divider: #e9edf5;
+  --color-auth-border-card: #e0e6ef;
+  --color-auth-border-subtle: #e6ecf4;
+  --color-auth-border-footer: #344153;
+
+  /* Status */
+  --color-auth-success-surface: #ecfcf5;
+  --color-auth-success: #0bc193;
+  --color-auth-success-badge: #0bbe91;
+  --color-auth-success-indicator: #14bd91;
+  --color-auth-error: #c32a21;
+  --color-auth-warning-surface: #fff4ed;
+  --color-auth-warning-text: #944519;
+  --color-auth-rating: #ffb713;
+  --color-auth-info-surface: #e6efff;
+  --color-auth-info: #007eb3;
+
+  /* Purple accents */
+  --color-auth-purple-surface: #f6f2ff;
+  --color-auth-purple: #9157ff;
+  --color-auth-purple-stat: #9360ff;
+  --color-auth-purple-text: #8b55ff;
+  --color-auth-purple-badge: #9056f4;
+
+  /* Shadows */
+  --color-auth-shadow-soft: #10223508;
+  --color-auth-shadow-inset: #10223504;
+  --color-auth-shadow-card: #1022350a;
+  --color-auth-shadow-brand: #ff571b24;
+  --color-auth-shadow-button: #ff571b20;
+
+  /* shadcn semantic colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #fff1e9;
+  --color-secondary-foreground: #a83517;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #586a80;
+  --color-accent: #fff1e9;
+  --color-accent-foreground: #a83517;
+  --color-destructive: #dc2626;
+  --color-border: #e2e8f0;
+  --color-input: #cbd5e1;
+  --color-ring: #d4451b;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+:root {
+  font-family: "Inter", "Roboto", system-ui, sans-serif;
+  --background: #f6f8fc;
+  --foreground: #172b43;
+  --card: #ffffff;
+  --primary: #d33c32;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply m-0 min-w-80 bg-background text-foreground;
+  }
+  button,
+  a,
+  input,
+  select {
+    @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring;
+  }
+  button:not(:disabled),
+  select {
+    @apply cursor-pointer;
+  }
+}

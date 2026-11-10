@@ -1,0 +1,488 @@
+.top-industries-page {
+  background: #f6f8fa;
+  color: #26364b;
+}
+.top-industries-page .ti-hero {
+  padding: 24px 0 38px;
+}
+.ti-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff5722;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.ti-eyebrow svg {
+  width: 14px;
+  height: 14px;
+}
+.ti-hero h1 {
+  font-size: 32px;
+  line-height: 1.25;
+  max-width: 780px;
+  font-weight: 750;
+  margin: 0 0 14px;
+}
+.ti-hero-row {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  justify-content: space-between;
+}
+.ti-hero-row > p {
+  max-width: 680px;
+  color: #7b8495;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.ti-stats {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.ti-stats > span {
+  display: grid;
+  grid-template-columns: 32px auto;
+  column-gap: 8px;
+  background: white;
+  border: 1px solid #e3e8ef;
+  border-radius: 10px;
+  padding: 14px;
+  min-width: 170px;
+}
+.ti-stats svg {
+  grid-row: span 2;
+  width: 24px;
+  color: #ff5722;
+}
+.ti-stats strong {
+  font-size: 16px;
+}
+.ti-stats small {
+  font-size: 10px;
+  color: #7b8495;
+}
+.ti-search {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr auto;
+  gap: 8px;
+  background: white;
+  border: 1px solid #e3e8ef;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 24px;
+}
+.ti-search label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ti-search label {
+  background: #f7f9fb;
+  border: 1px solid #e3e8ef;
+  border-radius: 9px;
+  padding: 10px 12px;
+  color: #637084;
+  min-width: 0;
+  transition:
+    border-color 0.16s,
+    box-shadow 0.16s;
+}
+.ti-search label:focus-within {
+  border-color: #ff875a;
+  box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.12);
+  background: #fff;
+}
+.ti-search select {
+  min-width: 0;
+}
+.ti-search input {
+  background: transparent;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: none;
+}
+.ti-search svg {
+  width: 16px;
+  height: 16px;
+}
+.ti-search button,
+.ti-directory > button {
+  background: #ff5722;
+  color: white;
+  border: 0;
+  border-radius: 7px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 650;
+}
+.ti-section {
+  margin-bottom: 70px;
+}
+.ti-section h2,
+.ti-report h2 {
+  font-size: 24px;
+  font-weight: 750;
+  line-height: 1.35;
+  margin: 0 0 22px;
+}
+.ti-section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+}
+.ti-section-heading > p {
+  font-size: 12px;
+  color: #858e9e;
+  max-width: 330px;
+}
+.ti-section-heading > a {
+  color: #ff5722;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+.ti-section-heading > a svg {
+  width: 14px;
+}
+.ti-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+.ti-industry {
+  background: white;
+  border: 1px solid #e1e6ec;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  --tone: #ff5722;
+  --wash: #fff1ea;
+}
+.ti-tone-1 {
+  --tone: #2189bb;
+  --wash: #e9f5ff;
+}
+.ti-tone-2 {
+  --tone: #9464ff;
+  --wash: #f4efff;
+}
+.ti-tone-3 {
+  --tone: #00bc8c;
+  --wash: #e7fbf3;
+}
+.ti-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--wash, #fff1ea);
+  color: var(--tone, #ff5722);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ti-icon svg {
+  width: 21px;
+  height: 21px;
+}
+.ti-industry h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 18px 0 7px;
+}
+.ti-count {
+  font-size: 12px;
+  color: #7e8998;
+}
+.ti-count strong {
+  font-size: 19px;
+  color: var(--tone);
+}
+.ti-salary {
+  display: flex;
+  flex-direction: column;
+  background: #f6f8fa;
+  border: 1px solid #e7ebf0;
+  border-radius: 7px;
+  padding: 10px;
+  margin: 15px 0;
+}
+.ti-salary small,
+.ti-industry > small {
+  font-size: 10px;
+  color: #8690a1;
+}
+.ti-salary strong {
+  font-size: 12px;
+  margin-top: 3px;
+}
+.ti-new {
+  font-size: 12px;
+  margin: 6px 0 20px;
+}
+.ti-industry > a {
+  border-top: 1px solid #edf0f4;
+  padding-top: 14px;
+  margin-top: auto;
+  color: var(--tone);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+}
+.ti-industry > a svg {
+  width: 15px;
+}
+.ti-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0 30px;
+}
+.ti-tabs button {
+  background: white;
+  border: 1px solid #e3e8ef;
+  color: #748196;
+  border-radius: 30px;
+  padding: 10px 16px;
+  font-size: 12px;
+}
+.ti-tabs button[aria-pressed="true"] {
+  background: #26364b;
+  color: white;
+  border-color: #26364b;
+}
+.ti-directory {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.ti-directory > a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 1px solid #e4e8ee;
+  border-radius: 8px;
+  padding: 12px;
+}
+.ti-directory .ti-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+}
+.ti-directory .ti-icon svg {
+  width: 16px;
+}
+.ti-directory strong {
+  font-size: 11px;
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.ti-directory small {
+  font-size: 10px;
+  color: #7e8998;
+}
+.ti-directory > button svg {
+  width: 16px;
+}
+.ti-report {
+  background: white;
+  border: 1px solid #e3e8ef;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 60px;
+}
+.ti-report > p {
+  font-size: 13px;
+  color: #7e8998;
+  margin-bottom: 24px;
+  max-width: 750px;
+}
+.ti-table-wrap {
+  overflow-x: auto;
+}
+.ti-report table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+.ti-report th,
+.ti-report td {
+  padding: 17px 10px;
+  border-bottom: 1px solid #edf0f5;
+}
+.ti-report thead th {
+  background: #f8fafc;
+  color: #8190a0;
+  font-size: 11px;
+  font-weight: 600;
+}
+.ti-report tbody th {
+  font-weight: 600;
+}
+.ti-pay {
+  color: #ff5722;
+}
+.ti-trend {
+  color: #00b888;
+  background: #eafbf5;
+  padding: 4px 10px;
+  border-radius: 5px;
+}
+.ti-report > small {
+  display: block;
+  color: #8792a3;
+  font-size: 11px;
+  margin-top: 20px;
+}
+.ti-jobs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.ti-jobs .job-listing-card {
+  min-width: 0;
+}
+.ti-state {
+  padding: 30px;
+  text-align: center;
+  background: white;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+.ti-state button {
+  margin-left: 15px;
+  color: #ff5722;
+  text-decoration: underline;
+}
+.top-industries-page button {
+  cursor: pointer;
+}
+.top-industries-page a:focus-visible,
+.top-industries-page button:focus-visible,
+.top-industries-page input:focus-visible {
+  outline: 2px solid #ff5722;
+  outline-offset: 3px;
+}
+@media (max-width: 1050px) {
+  .ti-hero-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ti-grid,
+  .ti-directory {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ti-search {
+    grid-template-columns: 1fr 1fr;
+  }
+  .ti-jobs {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .ti-hero h1 {
+    font-size: 25px;
+  }
+  .ti-search {
+    grid-template-columns: 1fr;
+  }
+  .ti-stats {
+    width: 100%;
+  }
+  .ti-stats > span {
+    min-width: 0;
+    flex: 1;
+    padding: 10px;
+    grid-template-columns: 24px auto;
+  }
+  .ti-stats small {
+    font-size: 9px;
+  }
+  .ti-grid {
+    grid-template-columns: 1fr;
+  }
+  .ti-directory {
+    grid-template-columns: 1fr;
+  }
+  .ti-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0;
+  }
+  .ti-section h2,
+  .ti-report h2 {
+    font-size: 21px;
+  }
+  .ti-report {
+    padding: 18px;
+  }
+  .ti-report table {
+    min-width: 580px;
+  }
+  .ti-section {
+    margin-bottom: 40px;
+  }
+  .ti-industry {
+    padding: 20px;
+  }
+}
+
+/* Constrain the flex item so the salary table cannot widen the entire page. */
+.top-industries-page > main {
+  width: 100%;
+  min-width: 0;
+}
+.ti-table-wrap {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.ti-grid > *,
+.ti-directory > *,
+.ti-hero-row > *,
+.ti-section-heading > * {
+  min-width: 0;
+}
+@media (max-width: 600px) {
+  .ti-search,
+  .ti-grid,
+  .ti-directory,
+  .ti-jobs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ti-search > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .ti-search input {
+    font-size: 16px;
+  }
+  .ti-search label,
+  .ti-search button {
+    min-height: 48px;
+  }
+  .ti-stats > span {
+    grid-template-columns: 24px minmax(0, 1fr);
+  }
+  .ti-hero h1,
+  .ti-section h2,
+  .ti-report h2,
+  .ti-industry h3 {
+    overflow-wrap: anywhere;
+  }
+}

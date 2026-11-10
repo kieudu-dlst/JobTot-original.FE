@@ -1,0 +1,156 @@
+/* Shared native selection control, including filter and date-picker variants. */
+:root select.ui-select[data-ui="select"] {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 38px 10px 14px;
+  border: 1px solid #dce2ef;
+  border-radius: 12px;
+  background-color: #fff;
+  color: #263449;
+  font:
+    500 14px/1.5 "Inter",
+    "Roboto",
+    sans-serif;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2373819d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background-color 0.15s;
+}
+:root select.ui-select[data-ui="select"]:hover:not(:disabled) {
+  border-color: #baa4ed;
+  background-color: #fefcff;
+}
+:root select.ui-select[data-ui="select"]:focus-visible,
+:root select.ui-select[data-ui="select"]:open {
+  outline: 0;
+  border-color: #8d68d9;
+  box-shadow: 0 0 0 3px #8d68d91c;
+}
+:root select.ui-select[data-ui="select"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  background-color: #f3f5f9;
+  color: #6a788e;
+}
+:root select.ui-select[data-ui="select"][aria-invalid="true"] {
+  border-color: #d2434c;
+  box-shadow: 0 0 0 3px #d2434c16;
+}
+:root select.ui-select[data-ui="select"][multiple],
+:root select.ui-select[data-ui="select"][size] {
+  background-image: none;
+  padding: 8px;
+  min-height: 88px;
+}
+@supports (appearance: base-select) {
+  :root select.ui-select[data-ui="select"]:not([multiple]):not([size]),
+  :root select.ui-select[data-ui="select"]:not([multiple]):not([size])::picker(select) {
+    appearance: base-select;
+  }
+  :root select.ui-select[data-ui="select"]:not([multiple]):not([size]) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    background-image: none;
+    padding-inline: 14px;
+    gap: 10px;
+  }
+  :root select.ui-select[data-ui="select"]::picker-icon {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2373819d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-inline-start: auto;
+    transition: rotate 0.15s;
+  }
+  :root select.ui-select[data-ui="select"]:open::picker-icon {
+    rotate: 180deg;
+  }
+  :root select.ui-select[data-ui="select"]::picker(select) {
+    margin-block: 6px;
+    padding: 6px;
+    border: 1px solid #e0d9f0;
+    border-radius: 14px;
+    background: #fff;
+    color: #263449;
+    box-shadow: 0 12px 36px #3a246b20;
+    font:
+      500 14px/1.6 "Inter",
+      "Roboto",
+      sans-serif;
+    max-height: min(340px, 60dvh);
+    max-width: calc(100vw - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  :root select.ui-select[data-ui="select"] option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+  }
+  :root select.ui-select[data-ui="select"] option:hover,
+  :root select.ui-select[data-ui="select"] option:focus {
+    background: #f4efff;
+    color: #6742ac;
+    outline: none;
+  }
+  :root select.ui-select[data-ui="select"] option:checked {
+    background: #fff0e7;
+    color: #bc3d1b;
+    font-weight: 600;
+  }
+  :root select.ui-select[data-ui="select"] option::checkmark {
+    color: #cc4018;
+    order: 1;
+    margin-inline-start: auto;
+  }
+  :root select.ui-select[data-ui="select"] option:disabled {
+    color: #8794a8;
+  }
+}
+@media (max-width: 760px) {
+  :root select.ui-select[data-ui="select"] {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root select.ui-select[data-ui="select"],
+  :root select.ui-select[data-ui="select"]::picker-icon {
+    transition: none;
+  }
+}
+:root select.ui-select[data-ui="select"][data-variant="embedded"] {
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  padding-block: 2px;
+  padding-inline-start: 0;
+  box-shadow: none;
+}
+:root select.ui-select[data-ui="select"][data-variant="embedded"]:focus-visible {
+  outline: 2px solid #a589e3;
+  outline-offset: 3px;
+}
+:root select.ui-select[data-ui="select"][data-density="compact"] {
+  min-height: 36px;
+  padding-block: 5px;
+  padding-inline-start: 10px;
+  font-size: 13px;
+}

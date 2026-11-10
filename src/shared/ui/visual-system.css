@@ -1,0 +1,424 @@
+/* Shared product surfaces and hierarchy. Printed CVs keep their document styling. */
+:root {
+  --ui-ink: #172b43;
+  --ui-muted: #5d6d82;
+  --ui-brand: #cc4018;
+  --ui-brand-hover: #b93916;
+  --ui-brand-wash: #fff2eb;
+  --ui-border: #e1e7ef;
+  --ui-radius: 16px;
+  --ui-shadow: 0 3px 16px rgb(30 50 80 / 4%);
+  --text-title: clamp(1.5rem, 1.08rem + 1.7vw, 2.5rem);
+  --text-section: clamp(1.25rem, 1.05rem + 0.75vw, 1.625rem);
+}
+
+.responsive-header {
+  border-bottom-color: var(--ui-border);
+  background: #fff;
+}
+.responsive-header .jobs-menu-trigger {
+  min-height: 44px;
+  padding-inline: 12px;
+  color: #465a72;
+  font-weight: 600;
+}
+.jobs-menu-content {
+  border-color: var(--ui-border);
+  border-radius: var(--ui-radius);
+  padding: 8px;
+  box-shadow: 0 12px 40px rgb(23 43 67 / 12%);
+}
+.jobs-menu-content .jobs-menu-item {
+  min-height: 44px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+.jobs-menu-content .jobs-menu-item[data-highlighted] {
+  background: var(--ui-brand-wash);
+  color: var(--ui-brand);
+}
+.mobile-menu-panel {
+  padding-inline: clamp(20px, 5vw, 28px);
+}
+.mobile-menu-panel .mobile-menu-link {
+  min-height: 48px;
+  font-size: 15px;
+}
+.mobile-menu-panel .mobile-menu-group h3 {
+  color: var(--ui-brand);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+:is(
+    .companies-page,
+    .salary-page,
+    .tools-page,
+    .top-industries-page,
+    .cv-studio-page,
+    .candidate-profile,
+    .articles-page,
+    .messages-page
+  ) {
+  background: #f6f8fc;
+  color: var(--ui-ink);
+}
+.page-container
+  :is(.home-hero, .jobs-hero, .salary-hero, .tools-hub-hero, .ti-hero, .bhtn-hero, .bhxh-hero)
+  h1 {
+  color: var(--ui-ink);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.page-container
+  :is(
+    .home-description,
+    .jobs-hero > p:last-child,
+    .salary-hero > p,
+    .tools-hub-hero > p,
+    .ti-hero-row > p
+  ) {
+  color: var(--ui-muted);
+  max-width: 740px;
+  margin-inline: auto;
+}
+.home-page .home-hero h1 a {
+  color: var(--ui-brand);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+.home-page .home-ai,
+.jobs-page .jobs-ai {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ui-brand);
+  border: 1px solid #ffe2d3;
+  padding: 8px 14px;
+}
+.page-container
+  :is(
+    .company-section-heading,
+    .home-jobs-heading,
+    .tools-hub-section-heading,
+    .ti-section-heading
+  ) {
+  margin-bottom: 24px;
+}
+.page-container
+  :is(.company-section-heading, .home-jobs-heading, .tools-hub-section-heading, .ti-section-heading)
+  h2 {
+  color: var(--ui-ink);
+  letter-spacing: -0.025em;
+}
+
+.page-container :is(.company-search, .ti-search) {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  box-shadow: 0 8px 32px rgb(30 50 80 / 5%);
+  padding: clamp(12px, 1.25vw, 18px);
+  gap: 12px;
+}
+.page-container :is(.company-search, .ti-search) > label {
+  border-color: #e1e7ef;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+.page-container :is(.company-search, .ti-search) input::placeholder {
+  color: #718198;
+}
+.page-container :is(.company-primary, .ti-search > button) {
+  background: var(--ui-brand);
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 650;
+  box-shadow: 0 3px 8px rgb(212 69 27 / 12%);
+}
+.page-container :is(.company-primary, .ti-search > button):hover {
+  background: var(--ui-brand-hover);
+}
+.responsive-header a.bg-auth-orange {
+  background: var(--ui-brand);
+}
+.page-container :is(.company-text-button, .knowledge-link) {
+  color: var(--ui-brand);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.page-container
+  :is(
+    .company-card,
+    .home-job-card,
+    .job-listing-card,
+    .salary-box,
+    .ti-industry,
+    .ti-report,
+    .tools-hub-card,
+    .detail-panel,
+    .jd-panel,
+    .profile-card,
+    .article-detail,
+    .article-catalog > article
+  ) {
+  border-color: var(--ui-border);
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+}
+.page-container :is(.company-card, .home-job-card, .job-listing-card, .ti-industry):hover {
+  border-color: #f1bda6;
+  box-shadow: 0 8px 26px rgb(30 50 80 / 7%);
+}
+.page-container :is(.home-job-card, .job-listing-card) {
+  padding: var(--space-card);
+}
+.page-container .company-featured-grid .company-card-body {
+  padding: 20px;
+  height: auto;
+  flex: 1;
+  gap: 14px;
+}
+.page-container .company-card-featured {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.page-container .company-card-featured .company-cover {
+  height: 140px;
+  flex-shrink: 0;
+}
+.page-container .company-cover-fallback > svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+}
+.page-container .company-card-featured h3,
+.page-container .home-job-card h3,
+.page-container .job-listing-info h2 {
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+.page-container .company-card-featured :is(.company-location, .company-size, .company-jobs-count),
+.page-container :is(.home-job-company, .job-listing-company, .job-listing-facts) {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ui-muted);
+}
+.page-container .company-card-featured .company-jobs-count {
+  color: var(--ui-brand);
+  font-weight: 600;
+}
+.page-container .company-card-featured .company-tags > span {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.page-container .company-card-featured .company-cover-badge {
+  font-size: 10px;
+  padding: 5px 8px;
+  right: 10px;
+}
+.page-container .company-card-featured .company-card-actions {
+  margin-top: auto;
+  gap: 10px;
+}
+.page-container .company-featured-grid .company-primary {
+  font-size: 13px;
+  padding: 10px 12px;
+  min-height: 44px;
+}
+.page-container .company-card-featured .company-logo {
+  width: 56px;
+  height: 48px;
+  margin-top: -40px;
+}
+.page-container
+  :is(
+    .company-follow,
+    .home-job-actions > button:last-child,
+    .job-listing-bottom > div > button:first-child
+  ) {
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  background: #fff;
+  flex-shrink: 0;
+}
+.page-container .job-listing-tags > span {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.page-container :is(.job-listing-bottom > span, .home-job-time) {
+  font-size: 12px;
+  color: var(--ui-muted);
+}
+.page-container .job-listing-bottom {
+  flex-wrap: wrap;
+  row-gap: 12px;
+}
+.page-container .job-listing-bottom > div {
+  margin-left: auto;
+}
+.page-container .home-tabs {
+  gap: 4px;
+  border-radius: 12px;
+  padding: 5px;
+}
+.page-container .home-tabs button {
+  min-height: 40px;
+  padding: 9px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+  color: var(--ui-muted);
+}
+.page-container .home-tabs button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--ui-brand);
+}
+
+.page-container :is(.salary-field, .salary-insurance legend, .salary-regions legend) {
+  font-size: 14px;
+  color: var(--ui-ink);
+}
+.page-container .salary-field > small {
+  font-size: 12px;
+  color: var(--ui-muted);
+}
+.page-container .salary-direction button {
+  font-size: 12px;
+  min-height: 44px;
+  border-radius: 8px;
+}
+.page-container .salary-direction {
+  border-radius: 12px;
+  padding: 5px;
+}
+.page-container .salary-direction button[aria-pressed="true"] {
+  background: var(--ui-brand);
+}
+.page-container .salary-result-cards article {
+  border-radius: 10px;
+}
+.page-container .salary-rows {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.page-container .salary-rows dt {
+  color: var(--ui-muted);
+}
+.page-container .salary-tax-table table {
+  font-size: 13px;
+}
+.page-container :is(.salary-tax-table, .ti-table-wrap) {
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+}
+.page-container :is(.tools-hub-card, .tools-hub-cv-card) {
+  min-height: 0;
+}
+.page-container :is(.tools-hub-card, .tools-hub-cv-card) h3 {
+  font-size: 18px;
+  line-height: 1.5;
+}
+.page-container :is(.tools-hub-card > p, .tools-hub-card li, .salary-guides article p) {
+  font-size: 14px;
+  color: var(--ui-muted);
+  line-height: 1.75;
+}
+.page-container .tools-hub-action {
+  min-height: 46px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--ui-ink);
+}
+.page-container .jobs-career-resources,
+.page-container .company-resources {
+  padding-top: var(--space-section);
+}
+.page-container .profile-editorial {
+  margin-top: var(--space-section);
+  padding-top: 0;
+}
+.site-footer p,
+.site-footer address {
+  line-height: 1.75;
+}
+.site-footer a:focus-visible,
+.page-container :is(a, button, input, select, textarea):focus-visible {
+  outline-color: var(--ui-brand);
+}
+
+@media (min-width: 951px) and (max-width: 1150px) {
+  .page-container .company-featured-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 601px) and (max-width: 950px) {
+  .page-container .company-featured-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .page-container .company-featured-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .page-container .company-card-featured .company-card-body {
+    padding: 18px;
+  }
+  .page-container .company-card-featured .company-cover {
+    height: 156px;
+  }
+  .page-container .company-card-featured h3 {
+    font-size: 17px;
+  }
+  .page-container
+    .company-card-featured
+    :is(.company-location, .company-size, .company-jobs-count) {
+    font-size: 14px;
+  }
+  .page-container .home-hero h1 br,
+  .page-container .jobs-hero h1 br {
+    display: none;
+  }
+  .page-container :is(.home-description, .jobs-hero > p:last-child) {
+    font-size: 14px;
+  }
+  .page-container .home-tabs {
+    width: 100%;
+  }
+  .page-container .home-tabs button {
+    flex: 1 1 auto;
+  }
+  .page-container .job-listing-logo {
+    width: 44px;
+    height: 44px;
+  }
+  .page-container .job-listing-bottom .company-primary {
+    font-size: 13px;
+    min-height: 44px;
+  }
+  .page-container .job-listing-bottom > div {
+    flex-wrap: wrap;
+  }
+  .page-container .salary-calculator-grid {
+    gap: 20px;
+  }
+  .page-container .salary-direction button {
+    white-space: normal;
+  }
+  .page-container :is(.company-section-heading > div > p, .tools-hub-section-heading > span) {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-container :is(.company-card, .home-job-card, .job-listing-card) {
+    transition: none;
+  }
+}

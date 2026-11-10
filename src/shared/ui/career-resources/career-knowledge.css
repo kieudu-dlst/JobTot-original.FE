@@ -1,0 +1,240 @@
+.career-knowledge.career-knowledge {
+  width: 100%;
+  max-width: 1184px;
+  margin: 96px auto 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #334155;
+}
+.career-knowledge .knowledge-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.career-knowledge .knowledge-heading p {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #ff602e;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 7px;
+}
+.career-knowledge .knowledge-heading h2 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 1.5;
+  margin: 0;
+  color: #334155;
+}
+.career-knowledge.career-knowledge .knowledge-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  color: #ff602e;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.career-knowledge .knowledge-heading svg,
+.career-knowledge .knowledge-link svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+.career-knowledge .knowledge-article-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+.career-knowledge article {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.career-knowledge .knowledge-article-art {
+  height: 165px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #ead7c3, #f1ebe3);
+  color: #977655;
+}
+.career-knowledge .article-art-1 {
+  background: linear-gradient(135deg, #cbdadd, #e6eff0);
+  color: #618995;
+}
+.career-knowledge .article-art-2 {
+  background: linear-gradient(135deg, #dbe0d1, #f1eedf);
+  color: #939777;
+}
+.career-knowledge .article-art-3 {
+  background: linear-gradient(135deg, #cddaea, #edf0f5);
+  color: #718dae;
+}
+.career-knowledge .knowledge-article-art svg {
+  width: 58px;
+  height: 58px;
+  stroke-width: 1;
+}
+.career-knowledge .knowledge-article-art span {
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+.career-knowledge article > div:last-child {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.career-knowledge small {
+  font-size: 11px;
+  color: #ff602e;
+}
+.career-knowledge h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 10px 0;
+  line-height: 1.7;
+  color: #334155;
+}
+.career-knowledge article p {
+  font-size: 12px;
+  color: #91a0b3;
+  line-height: 1.8;
+  margin: 0 0 18px;
+}
+.career-knowledge.career-knowledge article button {
+  margin-top: auto;
+  font-size: 12px;
+}
+.career-knowledge button:focus-visible {
+  outline: 3px solid #ffad8b;
+  outline-offset: 3px;
+}
+@media (max-width: 950px) {
+  .career-knowledge.career-knowledge {
+    margin-top: 64px;
+  }
+  .career-knowledge .knowledge-article-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .career-knowledge.career-knowledge {
+    margin-top: 48px;
+  }
+  .career-knowledge .knowledge-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .career-knowledge .knowledge-heading h2 {
+    font-size: 18px;
+  }
+  .career-knowledge .knowledge-heading p {
+    font-size: 12px;
+  }
+  .career-knowledge .knowledge-article-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .career-knowledge .knowledge-article-art {
+    height: 115px;
+  }
+  .career-knowledge .knowledge-article-art svg {
+    width: 40px;
+    height: 40px;
+  }
+  .career-knowledge .knowledge-article-art span {
+    font-size: 7px;
+  }
+  .career-knowledge article > div:last-child {
+    padding: 12px;
+  }
+  .career-knowledge h3 {
+    font-size: 12px;
+  }
+  .career-knowledge article p {
+    font-size: 11px;
+  }
+}
+
+.knowledge-cover {
+  display: block;
+  overflow: hidden;
+}
+.knowledge-cover img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Match the shared product typography and spacing. */
+.career-knowledge.career-knowledge {
+  margin-top: var(--space-section, 64px);
+  font-family: inherit;
+  color: var(--ui-ink, #172b43);
+}
+.career-knowledge.career-knowledge .knowledge-heading h2 {
+  font-size: var(--text-section, 24px);
+  line-height: 1.45;
+  color: var(--ui-ink, #172b43);
+}
+.career-knowledge.career-knowledge .knowledge-heading p {
+  color: var(--ui-brand, #d4451b);
+  font-size: 12px;
+  letter-spacing: 0.025em;
+  line-height: 1.6;
+}
+.career-knowledge.career-knowledge article {
+  min-width: 0;
+  border: 1px solid var(--ui-border, #e1e7ef);
+  border-radius: 16px;
+  box-shadow: var(--ui-shadow);
+}
+.career-knowledge.career-knowledge article > div:last-child {
+  padding: 20px;
+}
+.career-knowledge.career-knowledge h3 {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 650;
+  color: var(--ui-ink, #172b43);
+}
+.career-knowledge.career-knowledge article p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ui-muted, #5d6d82);
+}
+.career-knowledge.career-knowledge small {
+  font-size: 12px;
+  color: var(--ui-brand, #d4451b);
+}
+.career-knowledge.career-knowledge .knowledge-link {
+  min-height: 44px;
+  margin-top: auto;
+  color: var(--ui-brand, #d4451b);
+  font-size: 14px;
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .career-knowledge.career-knowledge .knowledge-article-art,
+  .career-knowledge.career-knowledge .knowledge-cover img {
+    height: 180px;
+  }
+  .career-knowledge.career-knowledge .knowledge-article-art span {
+    font-size: 10px;
+  }
+}

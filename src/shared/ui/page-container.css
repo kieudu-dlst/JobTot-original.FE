@@ -1,0 +1,13 @@
+.page-container {
+  width: 100%;
+  min-width: 0;
+  max-width: 1284px;
+  margin: auto;
+  padding: 0 var(--layout-gutter, 18px) var(--layout-bottom, 40px);
+}
+
+.page-container svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}

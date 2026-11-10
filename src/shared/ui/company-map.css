@@ -1,0 +1,56 @@
+.ec-map {
+  display: block;
+  width: 100%;
+  height: 220px;
+  border: 0;
+  border-radius: 7px;
+  background: #eef5f1;
+}
+.ec-map-link {
+  font-size: 11px;
+  color: #ff5b22;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+.ec-map-link svg {
+  width: 12px;
+  height: 12px;
+}
+.detail-map-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.detail-panel .detail-map-heading h2 {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.detail-map-heading h2 svg {
+  color: #ff5b22;
+  width: 18px;
+  height: 18px;
+}
+.detail-map-badge {
+  background: #e8faf3;
+  color: #00aa83;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 5px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .ec-map {
+    height: 200px;
+  }
+}

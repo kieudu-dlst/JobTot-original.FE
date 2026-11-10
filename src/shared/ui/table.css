@@ -1,0 +1,81 @@
+.ui-table-container {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.ui-table-container > .ui-table-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border: 1px solid var(--ui-border, #e1e7ef);
+  border-radius: 14px;
+  background: #fff;
+  scrollbar-width: thin;
+  scrollbar-color: #b7bfd6 #f4f6fc;
+}
+.ui-table-scroll:focus-visible {
+  outline: 3px solid #a894ed;
+  outline-offset: 3px;
+}
+.ui-table-scroll > .ui-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ui-ink, #172b43);
+  text-align: left;
+}
+.ui-table-scroll > .ui-table :is(th, td) {
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid #edf0f7;
+  vertical-align: middle;
+}
+.ui-table-scroll > .ui-table thead th {
+  background: #f3f1ff;
+  color: #564788;
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.ui-table-scroll > .ui-table tbody tr:last-child > :is(th, td) {
+  border-bottom: 0;
+}
+.ui-table-scroll > .ui-table tbody tr:hover {
+  background: #faf8ff;
+}
+.ui-table-scroll > .ui-table tbody th {
+  font-weight: 600;
+}
+.ui-table-scroll > .ui-table tfoot :is(th, td) {
+  background: #fff3eb;
+  border-top: 1px solid #f7d5c0;
+  font-weight: 650;
+}
+.ui-table-caption {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 650;
+  padding: 14px 16px;
+  background: #fff;
+}
+.ui-table-hint {
+  margin: 8px 2px 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #607087;
+}
+@media (max-width: 600px) {
+  .ui-table-scroll > .ui-table :is(th, td) {
+    padding: 12px;
+  }
+  .ui-table-scroll > .ui-table {
+    font-size: 13px;
+  }
+  .ui-table-container > .ui-table-scroll {
+    border-radius: 12px;
+  }
+}

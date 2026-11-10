@@ -1,0 +1,74 @@
+.section-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  border-bottom: 1px solid #e2e8ef;
+  margin: 25px 0 26px;
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.section-tabs .section-tab {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 4px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #8390a1;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.55;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+.section-tabs .section-tab[aria-current="page"],
+.section-tabs .section-tab[aria-pressed="true"] {
+  color: #ff5b22;
+  border-bottom-color: #ff5b22;
+}
+.section-tabs .section-tab:hover {
+  color: #ff5b22;
+}
+.section-tabs .section-tab:focus-visible {
+  outline: 2px solid #ff9f7b;
+  outline-offset: -3px;
+}
+.section-tabs .section-tab svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.section-tabs .section-tab-count {
+  background: #edf1f5;
+  color: #778799;
+  border-radius: 5px;
+  padding: 1px 6px;
+  min-width: 22px;
+  text-align: center;
+  font-size: 10px;
+}
+.section-tabs .section-tab[aria-current="page"] .section-tab-count,
+.section-tabs .section-tab[aria-pressed="true"] .section-tab-count {
+  color: #d55526;
+  background: #ffede5;
+}
+@media (max-width: 700px) {
+  .section-tabs {
+    gap: 13px;
+    margin: 20px 0;
+  }
+  .section-tabs .section-tab {
+    font-size: 11px;
+    gap: 5px;
+    padding: 12px 2px;
+  }
+  .section-tabs .section-tab svg {
+    width: 14px;
+    height: 14px;
+  }
+}

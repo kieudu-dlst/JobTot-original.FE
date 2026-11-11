@@ -35,6 +35,7 @@ import { AuthFooter } from "@/widgets/auth-footer";
 import { ServiceNotice } from "@/shared/ui/service-notice";
 import { useCandidateSession } from "@/features/authenticate";
 import { profileApi, downloadCv } from "../api/profile";
+import { validateProfilePhone } from "../model/phone";
 import { companiesApi } from "@/entities/company";
 import { AvatarEditor } from "./avatar-editor";
 import "./profile.css";
@@ -55,6 +56,7 @@ const entryFields = [
 ];
 const personalFields = [
   ["fullName", "Họ và tên", "text"],
+  ["phone", "Số điện thoại", "tel"],
   ["headline", "Chức danh", "text"],
   ["location", "Địa chỉ", "text"],
   ["birthDate", "Ngày sinh", "date"],
@@ -90,6 +92,7 @@ function AuthenticatedProfilePage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [editor, setEditor] = useState(null);
+  const [phoneError, setPhoneError] = useState("");
   const [provinces, setProvinces] = useState(null);
   const [provinceError, setProvinceError] = useState("");
   const [provinceAttempt, setProvinceAttempt] = useState(0);
@@ -136,11 +139,11 @@ function AuthenticatedProfilePage() {
   }, [accountId]);
   const preview = !account;
   const profile = data?.profile;
-  async function persist(next) {
+  async function persist(next, phone) {
     setBusy(true);
     setError("");
     try {
-      const saved = await profileApi.save(next);
+      const saved = await profileApi.save(next, phone);
       setData((current) => ({ ...saved, activity: saved.activity ?? current?.activity }));
       notify("Đã lưu hồ sơ thành công.");
       return true;
@@ -169,12 +172,23 @@ function AuthenticatedProfilePage() {
               tags: "",
             }
           : { ...profile[section][index] };
+    if (section === "personal") values.phone = data.phone || "";
+    setError("");
+    setPhoneError("");
     setEditor({ section, index, values });
   }
   async function submit(event) {
     event.preventDefault();
     const { section, index } = editor;
-    const values = { ...editor.values };
+    const { phone, ...values } = editor.values;
+    if (section === "personal") {
+      const validationError = validateProfilePhone(phone, !!data.email);
+      setPhoneError(validationError);
+      if (validationError) {
+        event.currentTarget.elements.namedItem("phone")?.focus();
+        return;
+      }
+    }
     if (section === "preferences") {
       const selectedProvince = provinces?.find(
         (province) =>
@@ -214,7 +228,7 @@ function AuthenticatedProfilePage() {
       if (index === null) next[section].push(values);
       else next[section][index] = values;
     }
-    if (await persist(next)) setEditor(null);
+    if (await persist(next, section === "personal" ? phone : undefined)) setEditor(null);
   }
   async function upload(event) {
     const file = event.target.files[0];
@@ -769,6 +783,34 @@ function AuthenticatedProfilePage() {
                           </option>
                         ))}
                       </Select>
+                    ) : editor.section === "personal" && key === "phone" ? (
+                      <>
+                        <FormInput
+                          name="phone"
+                          type="tel"
+                          autoComplete="tel"
+                          inputMode="tel"
+                          disabled={busy}
+                          value={editor.values.phone}
+                          aria-invalid={!!phoneError}
+                          aria-describedby={`profile-phone-hint${phoneError ? " profile-phone-error" : ""}`}
+                          onChange={(e) => {
+                            setPhoneError("");
+                            setEditor({
+                              ...editor,
+                              values: { ...editor.values, phone: e.target.value },
+                            });
+                          }}
+                        />
+                        <small id="profile-phone-hint" className="muted">
+                          Tối đa 15 chữ số. Chấp nhận đầu số 0, 84 hoặc +84.
+                        </small>
+                        {phoneError && (
+                          <span id="profile-phone-error" className="profile-error" role="alert">
+                            {phoneError}
+                          </span>
+                        )}
+                      </>
                     ) : type === "textarea" ? (
                       <textarea
                         rows={6}

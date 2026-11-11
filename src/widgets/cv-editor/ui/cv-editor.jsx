@@ -14,9 +14,11 @@ import {
   LayoutTemplate,
   Palette,
   ListTree,
+  ImagePlus,
 } from "lucide-react";
 import { CvSheet } from "@/entities/cv";
 import "./cv-editor.css";
+import { CvDecorationPanel } from "./cv-decoration-panel";
 
 const layouts = [
   ["one-column", "1 Cột (Harvard ATS)"],
@@ -25,11 +27,25 @@ const layouts = [
   ["bento", "Bento Pro"],
 ];
 const colors = ["#ff5722", "#243044", "#2845bd", "#009879", "#8a42ed"];
-export function CvEditor({ document: doc, onChange, children, readOnly = false }) {
+export function CvEditor({
+  document: doc,
+  onChange,
+  children,
+  readOnly = false,
+  uploadImage,
+  deleteImage,
+  onMediaBusyChange,
+}) {
   const [tab, setTab] = useState("layout");
   const [selected, setSelected] = useState(doc.sections[0]?.id);
   const [preview, setPreview] = useState(false);
   const [imageError, setImageError] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageBusy, setImageBusy] = useState(false);
+  function imageBusyChange(value) {
+    setImageBusy(value);
+    onMediaBusyChange?.(value);
+  }
   async function avatar(event) {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -68,6 +84,7 @@ export function CvEditor({ document: doc, onChange, children, readOnly = false }
             ["layout", LayoutTemplate, "Bố cục"],
             ["style", Palette, "Màu & Font"],
             ["sections", ListTree, "Mục CV"],
+            ["images", ImagePlus, "Ảnh trang trí"],
           ].map(([key, Icon, label]) => (
             <button key={key} aria-pressed={tab === key} onClick={() => setTab(key)}>
               <Icon />
@@ -76,6 +93,18 @@ export function CvEditor({ document: doc, onChange, children, readOnly = false }
           ))}
         </div>
         <fieldset disabled={readOnly}>
+          <div hidden={tab !== "images"}>
+            <CvDecorationPanel
+              document={doc}
+              onChange={onChange}
+              uploadImage={uploadImage}
+              deleteImage={deleteImage}
+              selected={selectedImage}
+              onSelect={setSelectedImage}
+              onBusyChange={imageBusyChange}
+              readOnly={readOnly}
+            />
+          </div>
           {tab === "layout" && (
             <>
               <h3>KIỂU BỐ CỤC CV</h3>
@@ -152,83 +181,89 @@ export function CvEditor({ document: doc, onChange, children, readOnly = false }
               </div>
             </>
           )}
-          <h3>QUẢN LÝ THỨ TỰ MỤC CV</h3>
-          <p className="cv-panel-hint">Dùng mũi tên để sắp xếp. Thông tin liên hệ luôn ở đầu CV.</p>
-          <div className="cv-section-list">
-            {doc.sections.map((item, index) => (
-              <div key={item.id} className={selected === item.id ? "cv-section-active" : ""}>
-                <button
-                  className="cv-section-label"
-                  onClick={() => {
-                    setSelected(item.id);
-                    setTab("sections");
-                  }}
-                >
-                  {item.title}
-                </button>
-                <div>
-                  <button
-                    aria-label={`Đưa ${item.title} lên`}
-                    disabled={index === 0}
-                    onClick={() => move(index, -1)}
-                  >
-                    <ArrowUp />
-                  </button>
-                  <button
-                    aria-label={`Đưa ${item.title} xuống`}
-                    disabled={index === doc.sections.length - 1}
-                    onClick={() => move(index, 1)}
-                  >
-                    <ArrowDown />
-                  </button>
-                  <button
-                    aria-label={`${item.visible ? "Ẩn" : "Hiện"} ${item.title}`}
-                    onClick={() => sectionPatch(item.id, { visible: !item.visible })}
-                  >
-                    {item.visible ? <Eye /> : <EyeOff />}
-                  </button>
-                  <button
-                    aria-label={`Xóa mục ${item.title}`}
-                    disabled={doc.sections.length === 1}
-                    onClick={() =>
-                      patch({ sections: doc.sections.filter((value) => value.id !== item.id) })
-                    }
-                  >
-                    <Trash2 />
-                  </button>
-                </div>
+          {tab !== "images" && (
+            <>
+              <h3>QUẢN LÝ THỨ TỰ MỤC CV</h3>
+              <p className="cv-panel-hint">
+                Dùng mũi tên để sắp xếp. Thông tin liên hệ luôn ở đầu CV.
+              </p>
+              <div className="cv-section-list">
+                {doc.sections.map((item, index) => (
+                  <div key={item.id} className={selected === item.id ? "cv-section-active" : ""}>
+                    <button
+                      className="cv-section-label"
+                      onClick={() => {
+                        setSelected(item.id);
+                        setTab("sections");
+                      }}
+                    >
+                      {item.title}
+                    </button>
+                    <div>
+                      <button
+                        aria-label={`Đưa ${item.title} lên`}
+                        disabled={index === 0}
+                        onClick={() => move(index, -1)}
+                      >
+                        <ArrowUp />
+                      </button>
+                      <button
+                        aria-label={`Đưa ${item.title} xuống`}
+                        disabled={index === doc.sections.length - 1}
+                        onClick={() => move(index, 1)}
+                      >
+                        <ArrowDown />
+                      </button>
+                      <button
+                        aria-label={`${item.visible ? "Ẩn" : "Hiện"} ${item.title}`}
+                        onClick={() => sectionPatch(item.id, { visible: !item.visible })}
+                      >
+                        {item.visible ? <Eye /> : <EyeOff />}
+                      </button>
+                      <button
+                        aria-label={`Xóa mục ${item.title}`}
+                        disabled={doc.sections.length === 1}
+                        onClick={() =>
+                          patch({ sections: doc.sections.filter((value) => value.id !== item.id) })
+                        }
+                      >
+                        <Trash2 />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <button
-            className="cv-add-section"
-            disabled={doc.sections.length >= 20}
-            onClick={() => {
-              const id = crypto.randomUUID();
-              patch({
-                sections: [
-                  ...doc.sections,
-                  { id, title: "MỤC MỚI", body: "Nhập nội dung của bạn", visible: true },
-                ],
-              });
-              setSelected(id);
-            }}
-          >
-            <Plus /> Thêm mục (Dự án, Giải thưởng…)
-          </button>
-          <label>
-            Ảnh chân dung
-            <input type="file" accept="image/png,image/jpeg" onChange={avatar} />
-          </label>
-          {doc.avatarDataUri && (
-            <button className="cv-add-section" onClick={() => patch({ avatarDataUri: null })}>
-              Gỡ ảnh chân dung
-            </button>
-          )}
-          {imageError && (
-            <p role="alert" className="cv-panel-hint">
-              {imageError}
-            </p>
+              <button
+                className="cv-add-section"
+                disabled={doc.sections.length >= 20}
+                onClick={() => {
+                  const id = crypto.randomUUID();
+                  patch({
+                    sections: [
+                      ...doc.sections,
+                      { id, title: "MỤC MỚI", body: "Nhập nội dung của bạn", visible: true },
+                    ],
+                  });
+                  setSelected(id);
+                }}
+              >
+                <Plus /> Thêm mục (Dự án, Giải thưởng…)
+              </button>
+              <label>
+                Ảnh chân dung
+                <input type="file" accept="image/png,image/jpeg" onChange={avatar} />
+              </label>
+              {doc.avatarDataUri && (
+                <button className="cv-add-section" onClick={() => patch({ avatarDataUri: null })}>
+                  Gỡ ảnh chân dung
+                </button>
+              )}
+              {imageError && (
+                <p role="alert" className="cv-panel-hint">
+                  {imageError}
+                </p>
+              )}
+            </>
           )}
         </fieldset>
         {children}
@@ -286,9 +321,15 @@ export function CvEditor({ document: doc, onChange, children, readOnly = false }
         <div className="cv-paper-wrap">
           <CvSheet
             document={doc}
-            onChange={preview || readOnly ? undefined : onChange}
+            onChange={preview || readOnly || imageBusy ? undefined : onChange}
             selected={preview ? undefined : selected}
             onSelect={setSelected}
+            selectedImage={preview || tab !== "images" ? null : selectedImage}
+            onSelectImage={(id) => {
+              setSelectedImage(id);
+              if (id) setTab("images");
+            }}
+            onInteractionChange={onMediaBusyChange}
           />
         </div>
       </div>

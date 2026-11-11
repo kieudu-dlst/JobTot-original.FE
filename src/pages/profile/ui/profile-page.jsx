@@ -93,6 +93,8 @@ function AuthenticatedProfilePage() {
   const [busy, setBusy] = useState(false);
   const [editor, setEditor] = useState(null);
   const [phoneError, setPhoneError] = useState("");
+  const [removingCv, setRemovingCv] = useState(null);
+  const [cvDeleteError, setCvDeleteError] = useState("");
   const [provinces, setProvinces] = useState(null);
   const [provinceError, setProvinceError] = useState("");
   const [provinceAttempt, setProvinceAttempt] = useState(0);
@@ -151,6 +153,22 @@ function AuthenticatedProfilePage() {
       setError(failure.message);
       notify(failure.message, { type: "error" });
       return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function removeCv() {
+    if (!removingCv || busy) return;
+    setBusy(true);
+    setCvDeleteError("");
+    try {
+      const cvs = await profileApi.removeCv(removingCv.id);
+      setData((current) => ({ ...current, cvs }));
+      setRemovingCv(null);
+      notify("Đã xóa CV khỏi hồ sơ.");
+    } catch (failure) {
+      setCvDeleteError(failure.message);
+      notify(failure.message, { type: "error" });
     } finally {
       setBusy(false);
     }
@@ -528,9 +546,27 @@ function AuthenticatedProfilePage() {
                             >
                               {cv.isDefault ? "Đặt làm CV bổ sung" : "Đặt làm CV chính"}
                             </button>
+                            <button
+                              className="cv-file-delete"
+                              type="button"
+                              disabled={busy}
+                              aria-label={`Xóa CV ${cv.title}`}
+                              onClick={() => {
+                                setCvDeleteError("");
+                                setRemovingCv(cv);
+                              }}
+                            >
+                              <Trash2 />
+                              Xóa CV
+                            </button>
                           </div>
                         </div>
                       ))
+                    )}
+                    {!preview && !data.cvs.length && (
+                      <p className="cv-hint" role="status">
+                        Bạn chưa có CV đính kèm. Tải lên CV PDF để ứng tuyển.
+                      </p>
                     )}
                     <p className="cv-hint">
                       {preview
@@ -654,6 +690,37 @@ function AuthenticatedProfilePage() {
         <CareerResources />
       </main>
       <AuthFooter />
+      <Dialog
+        open={!!removingCv}
+        onOpenChange={(open) => {
+          if (!open && !busy) setRemovingCv(null);
+        }}
+      >
+        <DialogContent className="profile-dialog cv-delete-dialog" showCloseButton={!busy}>
+          <DialogTitle>Xóa CV “{removingCv?.title}”?</DialogTitle>
+          <DialogDescription>
+            CV sẽ được gỡ khỏi hồ sơ của bạn và không còn dùng để ứng tuyển mới. Các hồ sơ ứng tuyển
+            đã gửi vẫn được giữ lại.
+          </DialogDescription>
+          {removingCv?.isDefault && data?.cvs.length > 1 && (
+            <p className="cv-hint">CV còn lại mới nhất sẽ được đặt làm CV chính.</p>
+          )}
+          {cvDeleteError && (
+            <p className="profile-error" role="alert">
+              {cvDeleteError}
+            </p>
+          )}
+          <div className="editor-actions">
+            <button type="button" disabled={busy} onClick={() => setRemovingCv(null)} autoFocus>
+              Hủy
+            </button>
+            <button className="cv-delete-confirm" type="button" disabled={busy} onClick={removeCv}>
+              <Trash2 />
+              {busy ? "Đang xóa…" : "Xóa CV"}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
       <Dialog
         open={!!editor}
         onOpenChange={(open) => {

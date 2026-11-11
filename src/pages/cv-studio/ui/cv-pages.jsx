@@ -542,13 +542,16 @@ function CandidateEditor({ initial, reload }) {
   const [version, setVersion] = useState(initial.version);
   const [saved, setSaved] = useState(JSON.stringify(draft));
   const [busy, setBusy] = useState(false);
+  const [mediaBusy, setMediaBusy] = useState(false);
+  const [printError, setPrintError] = useState("");
+  const [printing, setPrinting] = useState(false);
   const [error, setError] = useState(null);
   const saving = useRef(false);
   const controller = useRef(null);
   const alive = useRef(false);
   const snapshot = JSON.stringify(draft);
   const dirty = snapshot !== saved;
-  const blocker = useBlocker(dirty);
+  const blocker = useBlocker(dirty || mediaBusy);
   useEffect(() => {
     alive.current = true;
     return () => {
@@ -557,7 +560,7 @@ function CandidateEditor({ initial, reload }) {
     };
   }, []);
   const save = useCallback(async () => {
-    if (saving.current) return false;
+    if (saving.current || mediaBusy) return false;
     saving.current = true;
     setBusy(true);
     controller.current = new AbortController();
@@ -579,30 +582,47 @@ function CandidateEditor({ initial, reload }) {
       saving.current = false;
       if (alive.current) setBusy(false);
     }
-  }, [draft, version, initial.id]);
+  }, [draft, version, initial.id, mediaBusy]);
   useEffect(() => {
-    if (!dirty || busy || error) return;
+    if (!dirty || busy || mediaBusy || error) return;
     const timer = setTimeout(() => {
       void save();
     }, 900);
     return () => clearTimeout(timer);
-  }, [dirty, busy, error, save]);
+  }, [dirty, busy, mediaBusy, error, save]);
   useEffect(() => {
-    if (!dirty) return;
+    if (!dirty && !mediaBusy) return;
     const prevent = (event) => {
       event.preventDefault();
       event.returnValue = "";
     };
     window.addEventListener("beforeunload", prevent);
     return () => window.removeEventListener("beforeunload", prevent);
-  }, [dirty]);
+  }, [dirty, mediaBusy]);
+  async function print() {
+    setPrinting(true);
+    setPrintError("");
+    try {
+      await document.fonts.ready;
+      await Promise.all(
+        [...document.querySelectorAll(".cv-print-document img")].map((image) => image.decode()),
+      );
+      // Let font measurements and pagination settle before opening the browser print dialog.
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      window.print();
+    } catch {
+      setPrintError("Chưa tải được đầy đủ ảnh để in. Vui lòng kiểm tra kết nối và thử lại.");
+    } finally {
+      setPrinting(false);
+    }
+  }
   return (
     <>
       <PageBreadcrumb
         current={draft.title || "Chưa đặt tên CV"}
         parents={[{ to: "/my-cvs", label: "CV của tôi" }]}
       />
-      <style>{`@page { size: A4; margin: ${draft.document.margin}mm; }`}</style>
+      <style>{`@page { size: A4; margin: 0; }`}</style>
       <div className="cv-page-heading cv-edit-heading">
         <div>
           <input
@@ -618,7 +638,7 @@ function CandidateEditor({ initial, reload }) {
         <div className="cv-edit-actions">
           <button
             className="cv-secondary"
-            disabled={busy || !dirty || error?.status === 409}
+            disabled={busy || mediaBusy || !dirty || error?.status === 409}
             onClick={() => {
               void save();
             }}
@@ -626,9 +646,13 @@ function CandidateEditor({ initial, reload }) {
             <Save />
             Lưu CV
           </button>
-          <button className="cv-primary" disabled={dirty || busy} onClick={() => window.print()}>
+          <button
+            className="cv-primary"
+            disabled={dirty || busy || mediaBusy || printing}
+            onClick={print}
+          >
             <Printer />
-            In / Lưu PDF
+            {printing ? "Đang chuẩn bị…" : "In / Lưu PDF"}
           </button>
         </div>
       </div>
@@ -650,8 +674,16 @@ function CandidateEditor({ initial, reload }) {
       )}
       <CvEditor
         document={draft.document}
-        onChange={(document) => setDraft({ ...draft, document })}
+        onChange={(document) => setDraft((current) => ({ ...current, document }))}
+        uploadImage={(file, count) => cvApi.uploadImage(initial.id, file, count)}
+        deleteImage={(imageId) => cvApi.deleteImage(initial.id, imageId)}
+        onMediaBusyChange={setMediaBusy}
       />
+      {printError && (
+        <p role="alert" className="cv-error">
+          {printError}
+        </p>
+      )}
       <div className="cv-print-document">
         <CvSheet document={draft.document} />
       </div>
@@ -791,24 +823,25 @@ function AdminEditor({ initial, reload, onExpired }) {
   const [saved, setSaved] = useState(JSON.stringify(initial));
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [mediaBusy, setMediaBusy] = useState(false);
   const [destination, setDestination] = useState(null);
   const dirty = JSON.stringify(draft) !== saved;
-  const blocker = useBlocker(dirty);
+  const blocker = useBlocker(dirty || mediaBusy);
   useEffect(() => {
-    if (!dirty) return;
+    if (!dirty && !mediaBusy) return;
     const prevent = (event) => {
       event.preventDefault();
       event.returnValue = "";
     };
     window.addEventListener("beforeunload", prevent);
     return () => window.removeEventListener("beforeunload", prevent);
-  }, [dirty]);
+  }, [dirty, mediaBusy]);
   useEffect(() => {
     if (destination && !dirty) navigate(destination, { replace: true });
   }, [destination, dirty, navigate]);
   async function save(event) {
     event.preventDefault();
-    if (busy) return;
+    if (busy || mediaBusy) return;
     setBusy(true);
     try {
       const result = await adminCvApi.save(initial.id, draft);
@@ -837,7 +870,7 @@ function AdminEditor({ initial, reload, onExpired }) {
               {busy ? "Đang lưu mẫu…" : dirty ? "Có thay đổi chưa lưu" : "Đã lưu bản hiện tại"}
             </span>
           </div>
-          <button className="cv-primary" disabled={busy || error?.status === 409}>
+          <button className="cv-primary" disabled={busy || mediaBusy || error?.status === 409}>
             <Save />
             Lưu mẫu CV
           </button>
@@ -893,7 +926,10 @@ function AdminEditor({ initial, reload, onExpired }) {
       <CvEditor
         readOnly={busy}
         document={draft.document}
-        onChange={(document) => setDraft({ ...draft, document })}
+        onChange={(document) => setDraft((current) => ({ ...current, document }))}
+        uploadImage={(file, count) => adminCvApi.uploadImage(initial.id, file, count)}
+        deleteImage={(imageId) => adminCvApi.deleteImage(initial.id, imageId)}
+        onMediaBusyChange={setMediaBusy}
       />
       {blocker.state === "blocked" && (
         <div className="cv-dialog-backdrop">

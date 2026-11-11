@@ -447,7 +447,12 @@
   margin-bottom: 40px;
 }
 .cv-print-document {
-  display: none;
+  position: fixed;
+  left: -20000px;
+  top: 0;
+  width: 210mm;
+  visibility: hidden;
+  pointer-events: none;
 }
 .cv-my-list,
 .cv-admin-list {
@@ -732,11 +737,11 @@
   }
   .cv-print-document {
     display: block !important;
+    position: static;
+    width: 210mm;
+    visibility: visible;
   }
   .cv-print-document .cv-sheet {
     padding: 0;
-  }
-  .cv-print-document .cv-paper-section {
-    margin-bottom: 20px;
   }
 }

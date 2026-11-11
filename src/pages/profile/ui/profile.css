@@ -999,7 +999,8 @@
   border-top: 1px solid #f0e8e3;
 }
 .cv-file-actions .cv-file-primary,
-.cv-file-actions .cv-file-secondary {
+.cv-file-actions .cv-file-secondary,
+.cv-file-actions .cv-file-delete {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1033,6 +1034,29 @@
 .cv-file-actions .cv-file-secondary:hover {
   background: #f7f9fc;
   color: #334155;
+}
+.cv-file-actions .cv-file-delete {
+  color: #bd3333;
+  background: #fff;
+  border: 1px solid #f3d2d2;
+}
+.cv-file-actions .cv-file-delete:hover {
+  background: #fff1f1;
+}
+.cv-file-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.cv-delete-dialog {
+  overflow-wrap: anywhere;
+}
+.editor-actions .cv-delete-confirm {
+  background: #bd3333;
+  color: #fff;
+}
+.editor-actions .cv-delete-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .cv-file-actions svg {
   width: 15px;

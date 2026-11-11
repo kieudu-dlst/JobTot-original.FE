@@ -41,6 +41,8 @@ profileApi.setDefault = (id, isDefault) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ isDefault }),
   });
+profileApi.removeCv = (id) =>
+  request(`profile/cvs/${encodeURIComponent(id)}`, { method: "DELETE" });
 profileApi.avatar = (file) => {
   const body = new FormData();
   body.append("file", file);

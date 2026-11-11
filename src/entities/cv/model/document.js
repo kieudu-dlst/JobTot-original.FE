@@ -10,6 +10,7 @@ export const blankCv = () => ({
   font: "Roboto",
   fontSize: 10.5,
   margin: 15,
+  decorationImages: [],
   sections: [
     {
       id: "summary",

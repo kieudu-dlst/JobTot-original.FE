@@ -122,7 +122,8 @@ function JobDetail({ id }) {
     }
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [id, job, hash]);
-  const closed = job && (job.isClosed || new Date(job.expiresAt) <= new Date());
+  const expired = job && new Date(job.expiresAt) <= new Date();
+  const closed = job && (job.isClosed || expired);
   async function share() {
     try {
       await navigator.clipboard.writeText(`${window.location.origin}/jobs/${id}`);
@@ -226,7 +227,7 @@ function JobDetail({ id }) {
                   icon={CalendarClock}
                   label="HẠN NỘP HỒ SƠ"
                   value={formatDate(job.expiresAt)}
-                  note={closed ? "Đã kết thúc" : "Đang nhận hồ sơ"}
+                  note={expired ? "Đã hết hạn nộp hồ sơ" : undefined}
                 />
               </div>
             </section>
@@ -429,7 +430,7 @@ function Summary({ icon: Icon, label, value, note, orange }) {
       <div>
         <small>{label}</small>
         <strong className={orange ? "jd-orange" : ""}>{value}</strong>
-        {note && <span className="jd-orange">{note}</span>}
+        {note && <span className="jd-expired">{note}</span>}
       </div>
     </div>
   );

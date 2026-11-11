@@ -14,6 +14,9 @@ async function decode(response) {
   if (!response.ok) {
     const error = new Error(
       data?.detail ||
+        Object.values(data?.errors || {})
+          .flat()
+          .join(" ") ||
         (response.status === 401
           ? "Vui lòng đăng nhập để tiếp tục."
           : response.status === 404
@@ -29,9 +32,29 @@ const json = (value) => ({
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(value),
 });
+const imageForm = (file, currentCount) => {
+  const body = new FormData();
+  body.append("file", file);
+  body.append("currentCount", String(currentCount));
+  return { body };
+};
+export const cvImageUrl = (url) =>
+  url?.startsWith("/uploads/cv-decorations/") ? `${base}${url}` : "";
 const publicGet = (path, signal) =>
   fetch(`${base}/api/cv-templates${path}`, { signal, credentials: "omit" }).then(decode);
 export const cvApi = {
+  uploadImage: (id, file, count) =>
+    candidateFetch(`online-cvs/${encodeURIComponent(id)}/decoration-images`, {
+      method: "POST",
+      ...imageForm(file, count),
+    }).then(decode),
+  deleteImage: (id, imageId) =>
+    candidateFetch(
+      `online-cvs/${encodeURIComponent(id)}/decoration-images/${encodeURIComponent(imageId)}`,
+      {
+        method: "DELETE",
+      },
+    ).then(decode),
   setDefault: (id, isDefault) =>
     candidateFetch(`profile/cvs/${encodeURIComponent(id)}/default`, {
       method: "PUT",
@@ -58,6 +81,18 @@ export const cvApi = {
     }).then(decode),
 };
 export const adminCvApi = {
+  uploadImage: (id, file, count) =>
+    admin(`cv-templates${id ? `/${encodeURIComponent(id)}` : ""}/decoration-images`, {
+      method: "POST",
+      ...imageForm(file, count),
+    }),
+  deleteImage: (id, imageId) =>
+    admin(
+      `cv-templates${id ? `/${encodeURIComponent(id)}` : ""}/decoration-images/${encodeURIComponent(imageId)}`,
+      {
+        method: "DELETE",
+      },
+    ),
   login: adminAuth.login,
   logout: adminAuth.logout,
   list: (signal) => admin("cv-templates", { signal }),

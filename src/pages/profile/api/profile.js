@@ -22,12 +22,13 @@ async function mutate(method, body) {
   return request(`profile${multipart ? "/cvs" : ""}`, {
     method,
     headers: { ...(!multipart && { "Content-Type": "application/json" }) },
-    body: multipart ? body : JSON.stringify({ ...body, birthDate: body.birthDate || null }),
+    body: multipart ? body : JSON.stringify(body),
   });
 }
 export const profileApi = {
   get: getCandidateProfile,
-  save: (data) => mutate("PUT", data),
+  save: (profile, phone) =>
+    mutate("PUT", { profile: { ...profile, birthDate: profile.birthDate || null }, phone }),
   upload: (file) => {
     const body = new FormData();
     body.append("file", file);
@@ -40,6 +41,8 @@ profileApi.setDefault = (id, isDefault) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ isDefault }),
   });
+profileApi.removeCv = (id) =>
+  request(`profile/cvs/${encodeURIComponent(id)}`, { method: "DELETE" });
 profileApi.avatar = (file) => {
   const body = new FormData();
   body.append("file", file);

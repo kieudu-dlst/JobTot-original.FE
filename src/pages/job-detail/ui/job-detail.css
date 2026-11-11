@@ -200,6 +200,9 @@
   outline: 2px solid #ff602e;
   outline-offset: 4px;
 }
+.jd-expired {
+  color: #dc2626;
+}
 .jd-closed {
   color: #ac5353;
   padding: 12px;

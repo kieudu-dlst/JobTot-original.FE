@@ -34,8 +34,9 @@
   flex-shrink: 0;
   color: #ff5b22;
 }
-.er-banner h1,
-.er-calendar-heading h1 {
+.er-page-title,
+.er-banner h2,
+.er-calendar-heading h2 {
   font-size: 22px;
   font-weight: 800;
   line-height: 1.4;
@@ -782,7 +783,7 @@
   .er-interview-time small {
     margin-top: 0;
   }
-  .er-calendar-heading h1 {
+  .er-calendar-heading h2 {
     font-size: 20px;
   }
 }
@@ -795,7 +796,8 @@
     padding: 15px;
     margin-bottom: 16px;
   }
-  .er-banner h1 {
+  .er-page-title,
+  .er-banner h2 {
     font-size: 18px;
   }
   .er-banner-icon {
@@ -836,7 +838,7 @@
     align-items: flex-start;
     flex-direction: column;
   }
-  .er-calendar-heading h1 {
+  .er-calendar-heading h2 {
     font-size: 21px;
   }
   .er-calendar-layout {

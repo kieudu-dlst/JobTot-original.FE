@@ -1,9 +1,21 @@
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import "./section-tabs.css";
 
 export function SectionTabs({ items, active, onChange, label, className = "" }) {
+  const navRef = useRef(null);
+  useEffect(() => {
+    const nav = navRef.current;
+    const selected = nav.querySelector('[aria-current="page"], [aria-pressed="true"]');
+    if (!selected) return;
+    const bounds = nav.getBoundingClientRect();
+    const tab = selected.getBoundingClientRect();
+    // Keep the selected tab visible on narrow screens without moving the page vertically.
+    if (tab.left < bounds.left) nav.scrollLeft -= bounds.left - tab.left;
+    else if (tab.right > bounds.right) nav.scrollLeft += tab.right - bounds.right;
+  }, [active, items]);
   return (
-    <nav className={`section-tabs ${className}`} aria-label={label}>
+    <nav ref={navRef} className={`section-tabs ${className}`} aria-label={label}>
       {items.map(({ value, label: title, icon: Icon, to, count }) => {
         const content = (
           <>

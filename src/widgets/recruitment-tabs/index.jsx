@@ -1,21 +1,54 @@
 import { SectionTabs } from "@/shared/ui/section-tabs";
-import { UsersRound, Bookmark, FileText, CalendarDays } from "lucide-react";
+import { matchPath, useLocation, useSearchParams } from "react-router-dom";
+import { UsersRound, Heart, Bookmark, FileText, CalendarDays } from "lucide-react";
 
 const tabs = [
-  ["discover", "/employer/discover", "Tìm nhân tài"],
-  ["talents", "/employer/talents", "Danh sách tài năng"],
-  ["applications", "/employer/candidates", "Quản lý ứng viên"],
-  ["interviews", "/employer/interviews", "Lịch phỏng vấn & Đánh giá ứng viên"],
+  ["applications", "/employer/candidates", "Hồ sơ ứng tuyển", FileText],
+  ["interviews", "/employer/interviews", "Lịch phỏng vấn & đánh giá", CalendarDays],
 ];
 
-export function RecruitmentTabs({ active }) {
-  const icons = [UsersRound, Bookmark, FileText, CalendarDays];
+export function RecruitmentTabs() {
+  const { pathname } = useLocation();
   return (
     <SectionTabs
       className="er-tabs"
-      label="Quản lý tuyển dụng"
+      label="Quản lý CV"
+      active={matchPath("/employer/interviews", pathname) ? "interviews" : "applications"}
+      items={tabs.map(([value, to, label, icon]) => ({ value, to, label, icon }))}
+    />
+  );
+}
+
+const collections = [
+  ["all", "Khám phá hồ sơ", UsersRound],
+  ["interested", "Đang quan tâm", Heart],
+  ["saved", "Đã lưu tài năng", Bookmark],
+];
+
+export function TalentDiscoveryTabs({ stats }) {
+  const { pathname } = useLocation();
+  const [params] = useSearchParams();
+  const isPool = Boolean(matchPath("/employer/talents", pathname));
+  const collection = isPool ? "saved" : params.get("collection");
+  const active = ["interested", "saved"].includes(collection) ? collection : "all";
+  return (
+    <SectionTabs
+      className="td-collections"
+      label="Tìm nhân tài"
       active={active}
-      items={tabs.map(([value, to, label], index) => ({ value, to, label, icon: icons[index] }))}
+      items={collections.map(([value, label, icon]) => {
+        const next = new URLSearchParams(isPool ? "" : params);
+        next.delete("page");
+        if (value === "all") next.delete("collection");
+        else next.set("collection", value);
+        return {
+          value,
+          label,
+          icon,
+          to: `/employer/discover${next.size ? `?${next}` : ""}`,
+          count: stats ? stats[value === "all" ? "discoverable" : value] : undefined,
+        };
+      })}
     />
   );
 }

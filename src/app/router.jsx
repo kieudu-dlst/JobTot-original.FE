@@ -12,7 +12,7 @@ import { CampaignListPage, CampaignEditPage } from "@/pages/employer-campaigns";
 import { EmployerCandidatesPage } from "@/pages/employer-candidates";
 import { EmployerDiscoveryPage } from "@/pages/employer-discovery";
 import { MessagesPage } from "@/pages/messages";
-import { AuthPage } from "@/pages/auth";
+import { AuthPage, ExternalAuthPage } from "@/pages/auth";
 import { ResetPasswordPage } from "@/pages/auth";
 import { ProfilePage } from "@/pages/profile";
 import { CompaniesPage, CompanyDetailPage } from "@/pages/companies";
@@ -38,6 +38,7 @@ export const router = createBrowserRouter([
   { path: "/career-articles/:id", element: <ArticlesPage /> },
   { path: "/", element: <HomePage /> },
   { path: "/register", element: <AuthPage mode="register" /> },
+  { path: "/auth/external", element: <ExternalAuthPage /> },
   { path: "/employer/account", element: <EmployerAccountPage /> },
   { path: "/employer/company", element: <EmployerCompanyPage /> },
   { path: "/employer/campaigns", element: <CampaignListPage /> },

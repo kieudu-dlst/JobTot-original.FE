@@ -1,4 +1,4 @@
-export function validateAuth(values, mode) {
+export function validateAuth(values, mode, externalRegistration = false) {
   const errors = {};
   if (mode === "register" && values.fullName.trim().length < 2)
     errors.fullName = "Vui lòng nhập họ và tên (ít nhất 2 ký tự).";
@@ -13,11 +13,11 @@ export function validateAuth(values, mode) {
   if (mode === "register" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identity))
     errors.identity = "Đăng ký cần email hợp lệ để xác thực tài khoản.";
   if (identity.length > 320) errors.identity = "Email hoặc số điện thoại tối đa 320 ký tự.";
-  if (!values.password) errors.password = "Vui lòng nhập mật khẩu.";
-  else if (mode === "register" && values.password.length < 8)
+  if (!externalRegistration && !values.password) errors.password = "Vui lòng nhập mật khẩu.";
+  else if (!externalRegistration && mode === "register" && values.password.length < 8)
     errors.password = "Mật khẩu cần có ít nhất 8 ký tự.";
   if (values.password.length > 128) errors.password = "Mật khẩu tối đa 128 ký tự.";
-  if (mode === "register" && values.confirmPassword !== values.password)
+  if (!externalRegistration && mode === "register" && values.confirmPassword !== values.password)
     errors.confirmPassword = "Mật khẩu xác nhận chưa khớp.";
   return errors;
 }

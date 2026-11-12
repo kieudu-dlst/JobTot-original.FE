@@ -13,15 +13,19 @@ import { useCandidateSession } from "../model/session-context";
 import { validateAuth } from "../model/validation";
 import { AuthField } from "./auth-field";
 import { ForgotPasswordDialog } from "./forgot-password-dialog";
+import { externalAuth, externalNeedsEmailVerification } from "../api/external-auth";
 
-export function CredentialsForm({ mode }) {
+export function CredentialsForm({ mode, external }) {
   const notify = useToast();
   const register = mode === "register";
   const [values, setValues] = useState({
-    fullName: "",
-    identity: "",
+    fullName: external?.fullName || "",
+    identity: external?.email || "",
     password: "",
     confirmPassword: "",
+    confirmRole: false,
+    acceptTerms: false,
+    confirmLink: false,
   });
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
@@ -47,7 +51,13 @@ export function CredentialsForm({ mode }) {
     event.preventDefault();
     if (submitting.current) return;
     setMessage("");
-    const nextErrors = validateAuth(values, mode);
+    const nextErrors = validateAuth(values, mode, Boolean(external && register));
+    if (external && register && !values.confirmRole)
+      nextErrors.confirmRole = "Vui lòng xác nhận vai trò Ứng viên.";
+    if (external && register && !values.acceptTerms)
+      nextErrors.acceptTerms = "Vui lòng đồng ý điều khoản dịch vụ và chính sách bảo mật.";
+    if (external && !register && !values.confirmLink)
+      nextErrors.confirmLink = "Vui lòng xác nhận liên kết tài khoản.";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) {
       document.getElementById(Object.keys(nextErrors)[0])?.focus();
@@ -56,10 +66,15 @@ export function CredentialsForm({ mode }) {
     submitting.current = true;
     setPending(true);
     try {
-      const emailVerificationToken = register
-        ? await emailFlow.prepareRegistration(values.identity)
-        : null;
-      if (register && !emailVerificationToken) {
+      const emailVerificationToken =
+        register && (!external || externalNeedsEmailVerification(external, values.identity))
+          ? await emailFlow.prepareRegistration(values.identity)
+          : null;
+      if (
+        register &&
+        (!external || externalNeedsEmailVerification(external, values.identity)) &&
+        !emailVerificationToken
+      ) {
         setMessage("Kiểm tra email và nhập mã xác thực để tiếp tục.");
         return;
       }
@@ -69,17 +84,30 @@ export function CredentialsForm({ mode }) {
         emailOrPhone: values.identity.trim(),
         password: newPassword || values.password,
       };
-      const session = register
-        ? await candidateAuth.register({
-            ...body,
-            emailVerificationToken,
-            fullName: values.fullName.trim(),
-            confirmPassword: values.confirmPassword,
-          })
-        : await candidateAuth.login({ ...body, rememberMe: remember });
+      const session = external
+        ? register
+          ? await externalAuth.register("candidate", external.flowId, {
+              ...values,
+              email: values.identity.trim(),
+              emailVerificationToken,
+            })
+          : await externalAuth.link("candidate", external.flowId, {
+              identity: values.identity.trim(),
+              password: newPassword || values.password,
+              confirmLink: values.confirmLink,
+              rememberMe: remember,
+            })
+        : register
+          ? await candidateAuth.register({
+              ...body,
+              emailVerificationToken,
+              fullName: values.fullName.trim(),
+              confirmPassword: values.confirmPassword,
+            })
+          : await candidateAuth.login({ ...body, rememberMe: remember });
       signIn(session.account, { rememberMe: !register && remember });
       notify(register ? "Đăng ký tài khoản thành công." : "Đăng nhập thành công.");
-      navigate(authReturnPath(search), { replace: true });
+      navigate(external?.returnTo || authReturnPath(search), { replace: true });
     } catch (failure) {
       if (failure.changeToken) emailFlow.setChangeToken(failure.changeToken);
       setErrors(failure.fields || {});
@@ -109,33 +137,70 @@ export function CredentialsForm({ mode }) {
         placeholder="email@example.com"
         {...field("identity")}
       />
-      <div
-        className={
-          register ? "grid grid-cols-2 gap-4 max-[950px]:grid-cols-1 max-[950px]:gap-3" : undefined
-        }
-      >
-        <AuthField
-          name="password"
-          label="Mật khẩu"
-          icon={LockKeyhole}
-          password
-          autoComplete={register ? "new-password" : "current-password"}
-          placeholder={register ? "Tối thiểu 8 ký tự" : "Nhập mật khẩu"}
-          trailing={!register && <ForgotPasswordDialog />}
-          {...field("password")}
-        />
-        {register && (
+      {!(external && register) && (
+        <div
+          className={
+            register
+              ? "grid grid-cols-2 gap-4 max-[950px]:grid-cols-1 max-[950px]:gap-3"
+              : undefined
+          }
+        >
           <AuthField
-            name="confirmPassword"
-            label="Xác nhận mật khẩu"
+            name="password"
+            label="Mật khẩu"
             icon={LockKeyhole}
             password
-            autoComplete="new-password"
-            placeholder="Nhập lại mật khẩu"
-            {...field("confirmPassword")}
+            autoComplete={register ? "new-password" : "current-password"}
+            placeholder={register ? "Tối thiểu 8 ký tự" : "Nhập mật khẩu"}
+            trailing={!register && <ForgotPasswordDialog />}
+            {...field("password")}
           />
-        )}
-      </div>
+          {register && (
+            <AuthField
+              name="confirmPassword"
+              label="Xác nhận mật khẩu"
+              icon={LockKeyhole}
+              password
+              autoComplete="new-password"
+              placeholder="Nhập lại mật khẩu"
+              {...field("confirmPassword")}
+            />
+          )}
+        </div>
+      )}
+      {external &&
+        (register
+          ? [
+              ["confirmRole", "Tôi xác nhận đăng ký tài khoản Ứng viên."],
+              ["acceptTerms", "Tôi đồng ý Điều khoản dịch vụ và Chính sách bảo mật của Job Tốt."],
+            ]
+          : [
+              [
+                "confirmLink",
+                `Tôi đồng ý liên kết ${external.provider} với tài khoản Job Tốt vừa đăng nhập.`,
+              ],
+            ]
+        ).map(([name, label]) => (
+          <div key={name}>
+            <Label className="flex items-start gap-2 text-xs font-normal">
+              <Checkbox
+                id={name}
+                aria-invalid={Boolean(errors[name])}
+                aria-describedby={errors[name] ? `${name}-error` : undefined}
+                checked={values[name]}
+                onCheckedChange={(value) =>
+                  setValues((current) => ({ ...current, [name]: value === true }))
+                }
+              />
+              {label}
+            </Label>
+            {errors[name] && (
+              <p id={`${name}-error`} role="alert" className="text-xs text-auth-warning-text">
+                {errors[name]}
+              </p>
+            )}
+          </div>
+        ))}
       {!register && (
         <div className="mt-1 flex items-center gap-2">
           <Checkbox
@@ -158,7 +223,15 @@ export function CredentialsForm({ mode }) {
         disabled={pending}
         className={`w-full gap-[7px] border-0 bg-auth-orange text-base font-bold text-white hover:bg-auth-brand-hover max-[950px]:text-sm [&_svg]:size-[19px] ${register ? "-mt-1 h-[52px] rounded-xl" : "mt-0 h-12 rounded-lg"}`}
       >
-        {pending ? "Đang xử lý…" : register ? "Đăng ký tài khoản miễn phí" : "Đăng nhập ngay"}
+        {pending
+          ? "Đang xử lý…"
+          : external
+            ? register
+              ? "Hoàn tất đăng ký Ứng viên"
+              : "Đăng nhập và xác nhận liên kết"
+            : register
+              ? "Đăng ký tài khoản miễn phí"
+              : "Đăng nhập ngay"}
         <ArrowRight />
       </Button>
       {message && (

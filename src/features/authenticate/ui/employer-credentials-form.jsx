@@ -2,7 +2,8 @@ import { Select } from "@/shared/ui/select";
 import { useEmailAuthFlow } from "../model/use-email-auth-flow";
 import { EmailAuthFields } from "./email-auth-fields";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { authReturnPath } from "@/shared/lib/auth-return-path";
 import {
   ArrowRight,
   Building2,
@@ -21,17 +22,18 @@ import { useEmployerSession } from "../model/employer-session-context";
 import { validateEmployer } from "../model/employer-validation";
 import { AuthField } from "./auth-field";
 import { ForgotPasswordDialog } from "./forgot-password-dialog";
+import { externalAuth, externalNeedsEmailVerification } from "../api/external-auth";
 
 const pairClass = "grid grid-cols-2 gap-4 max-[950px]:grid-cols-1 max-[950px]:gap-3";
 const checkboxClass =
   "size-4 shrink-0 rounded-[3px] border-auth-orange shadow-none data-[state=checked]:bg-auth-orange data-[state=checked]:text-white";
 
-export function EmployerCredentialsForm({ mode }) {
+export function EmployerCredentialsForm({ mode, external }) {
   const register = mode === "register";
   const [values, setValues] = useState({
-    fullName: "",
+    fullName: external?.fullName || "",
     workPhone: "",
-    email: "",
+    email: external?.email || "",
     companyName: "",
     taxCode: "",
     headOfficeProvinceId: "",
@@ -39,6 +41,8 @@ export function EmployerCredentialsForm({ mode }) {
     confirmPassword: "",
     acceptTerms: false,
     recruitmentCommitment: false,
+    confirmRole: false,
+    confirmLink: false,
   });
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
@@ -50,6 +54,7 @@ export function EmployerCredentialsForm({ mode }) {
   const submitting = useRef(false);
   const { signIn } = useEmployerSession();
   const navigate = useNavigate();
+  const { search } = useLocation();
   const notify = useToast();
   useEffect(() => {
     if (!register) return;
@@ -83,7 +88,11 @@ export function EmployerCredentialsForm({ mode }) {
   async function submit(event) {
     event.preventDefault();
     if (submitting.current) return;
-    const next = validateEmployer(values, register);
+    const next = validateEmployer(values, register, Boolean(external && register));
+    if (external && register && !values.confirmRole)
+      next.confirmRole = "Vui lòng xác nhận vai trò Nhà tuyển dụng.";
+    if (external && !register && !values.confirmLink)
+      next.confirmLink = "Vui lòng xác nhận liên kết tài khoản.";
     setErrors(next);
     setMessage("");
     if (Object.keys(next).length) {
@@ -93,37 +102,56 @@ export function EmployerCredentialsForm({ mode }) {
     submitting.current = true;
     setPending(true);
     try {
-      const emailVerificationToken = register
-        ? await emailFlow.prepareRegistration(values.email)
-        : null;
-      if (register && !emailVerificationToken) {
+      const emailVerificationToken =
+        register && (!external || externalNeedsEmailVerification(external, values.email))
+          ? await emailFlow.prepareRegistration(values.email)
+          : null;
+      if (
+        register &&
+        (!external || externalNeedsEmailVerification(external, values.email)) &&
+        !emailVerificationToken
+      ) {
         setMessage("Kiểm tra email và nhập mã xác thực để tiếp tục.");
         return;
       }
       const newPassword = !register ? await emailFlow.changeTemporary() : null;
       if (newPassword) setValues((current) => ({ ...current, password: newPassword }));
-      const session = register
-        ? await employerAuth.register({
-            ...values,
-            emailVerificationToken,
-            fullName: values.fullName.trim(),
-            email: values.email.trim(),
-            companyName: values.companyName.trim(),
-            workPhone: values.workPhone.trim(),
-            taxCode: values.taxCode.trim(),
-          })
-        : await employerAuth.login({
-            email: values.email.trim(),
-            password: newPassword || values.password,
-            rememberMe: remember,
-          });
+      const session = external
+        ? register
+          ? await externalAuth.register("employer", external.flowId, {
+              ...values,
+              emailVerificationToken,
+            })
+          : await externalAuth.link("employer", external.flowId, {
+              identity: values.email.trim(),
+              password: newPassword || values.password,
+              confirmLink: values.confirmLink,
+              rememberMe: remember,
+            })
+        : register
+          ? await employerAuth.register({
+              ...values,
+              emailVerificationToken,
+              fullName: values.fullName.trim(),
+              email: values.email.trim(),
+              companyName: values.companyName.trim(),
+              workPhone: values.workPhone.trim(),
+              taxCode: values.taxCode.trim(),
+            })
+          : await employerAuth.login({
+              email: values.email.trim(),
+              password: newPassword || values.password,
+              rememberMe: remember,
+            });
       signIn(session.account);
       notify(
         register
           ? "Đã tạo tài khoản nhà tuyển dụng. Doanh nghiệp đang chờ xác minh."
           : "Đăng nhập thành công.",
       );
-      navigate("/employer/account", { replace: true });
+      navigate(external?.returnTo || authReturnPath(search, "/employer/account"), {
+        replace: true,
+      });
     } catch (failure) {
       if (failure.changeToken) emailFlow.setChangeToken(failure.changeToken);
       setErrors(failure.fields || {});
@@ -258,31 +286,40 @@ export function EmployerCredentialsForm({ mode }) {
           </div>
         </>
       )}
-      <div className={register ? pairClass : undefined}>
-        <AuthField
-          name="password"
-          label="Mật khẩu"
-          icon={LockKeyhole}
-          password
-          autoComplete={register ? "new-password" : "current-password"}
-          maxLength={128}
-          placeholder={register ? "Tối thiểu 8 ký tự" : "Nhập mật khẩu"}
-          trailing={!register && <ForgotPasswordDialog role="employer" />}
-          {...field("password")}
-        />
-        {register && (
+      {!(external && register) && (
+        <div className={register ? pairClass : undefined}>
           <AuthField
-            name="confirmPassword"
-            label="Xác nhận mật khẩu"
+            name="password"
+            label="Mật khẩu"
             icon={LockKeyhole}
             password
-            autoComplete="new-password"
+            autoComplete={register ? "new-password" : "current-password"}
             maxLength={128}
-            placeholder="Nhập lại mật khẩu"
-            {...field("confirmPassword")}
+            placeholder={register ? "Tối thiểu 8 ký tự" : "Nhập mật khẩu"}
+            trailing={!register && <ForgotPasswordDialog role="employer" />}
+            {...field("password")}
           />
+          {register && (
+            <AuthField
+              name="confirmPassword"
+              label="Xác nhận mật khẩu"
+              icon={LockKeyhole}
+              password
+              autoComplete="new-password"
+              maxLength={128}
+              placeholder="Nhập lại mật khẩu"
+              {...field("confirmPassword")}
+            />
+          )}
+        </div>
+      )}
+      {external &&
+        consent(
+          register ? "confirmRole" : "confirmLink",
+          register
+            ? "Tôi xác nhận đăng ký tài khoản Nhà tuyển dụng."
+            : `Tôi đồng ý liên kết ${external.provider} với tài khoản Nhà tuyển dụng vừa đăng nhập.`,
         )}
-      </div>
       {register ? (
         <div className="mt-2 grid gap-3">
           {consent(
@@ -319,9 +356,11 @@ export function EmployerCredentialsForm({ mode }) {
         <span>
           {pending
             ? "Đang xử lý…"
-            : register
-              ? "Đăng ký tài khoản Nhà tuyển dụng miễn phí"
-              : "Đăng nhập ngay"}
+            : external && !register
+              ? "Đăng nhập và xác nhận liên kết"
+              : register
+                ? "Đăng ký tài khoản Nhà tuyển dụng miễn phí"
+                : "Đăng nhập ngay"}
         </span>
         <ArrowRight />
       </Button>

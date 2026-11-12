@@ -1,8 +1,8 @@
-export function authReturnPath(search) {
+export function authReturnPath(search, fallback = "/jobs") {
   const path = new URLSearchParams(search).get("returnTo");
-  return /^(\/jobs\/[0-9a-f-]{36}(#job-application)?|\/my-jobs(\?tab=(saved|applied|companies|interviews))?|\/messages(\?(hr=[^&#]+|company=[0-9a-f-]{36}))?)$/i.test(
+  return /^(\/auth\/external\?role=(candidate|employer)&flow=[0-9a-f-]{36}|\/jobs\/[0-9a-f-]{36}(#job-application)?|\/my-jobs(\?tab=(saved|applied|companies|interviews))?|\/messages(\?(hr=[^&#]+|company=[0-9a-f-]{36}))?)$/i.test(
     path || "",
   )
     ? path
-    : "/jobs";
+    : fallback;
 }

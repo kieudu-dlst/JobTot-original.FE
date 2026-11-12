@@ -43,6 +43,7 @@ export const router = createBrowserRouter([
   { path: "/employer/campaigns", element: <CampaignListPage /> },
   { path: "/employer/campaigns/new", element: <CampaignEditPage /> },
   { path: "/employer/campaigns/:id/edit", element: <CampaignEditPage /> },
+  // Saved-profile management belongs to talent discovery; preserve its existing URL and actions.
   { path: "/employer/talents", element: <EmployerCandidatesPage view="talents" /> },
   { path: "/employer/discover", element: <EmployerDiscoveryPage /> },
   { path: "/employer/candidates", element: <EmployerCandidatesPage view="applications" /> },

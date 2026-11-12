@@ -1,6 +1,6 @@
 import { Select } from "@/shared/ui/select";
 import { Table, TableScroll } from "@/shared/ui/table";
-import { RecruitmentTabs } from "@/widgets/recruitment-tabs";
+import { RecruitmentTabs, TalentDiscoveryTabs } from "@/widgets/recruitment-tabs";
 import { formatDate } from "@/shared/lib/date-format";
 import { FormInput } from "@/shared/ui/date-picker";
 import { ApplicantDetail } from "./applicant-detail";
@@ -31,9 +31,9 @@ import { recruitmentRequest, mutate } from "../api/candidates";
 import "./employer-candidates.css";
 
 const titles = {
-  talents: "Danh sách tài năng",
-  applications: "Quản lý ứng viên",
-  interviews: "Lịch phỏng vấn & Đánh giá ứng viên",
+  talents: "Đã lưu tài năng",
+  applications: "Hồ sơ ứng tuyển",
+  interviews: "Lịch phỏng vấn & đánh giá",
 };
 const readiness = {
   unknown: "Chưa xác định",
@@ -115,11 +115,14 @@ function Recruitment({ account, view }) {
   }
   return (
     <div className="employer-recruitment font-roboto">
-      <title>{titles[view]} | Job Tốt</title>
-      <EmployerHeader userName={account.fullName} active="candidates" />
+      <title>
+        {titles[view]} | {view === "talents" ? "Tìm nhân tài" : "Quản lý CV"} | Job Tốt
+      </title>
+      <EmployerHeader userName={account.fullName} />
       <main className="page-container company-container er-container">
-        <PageBreadcrumb current="Quản lý ứng viên" root={null} />
-        <RecruitmentTabs active={view} />
+        <PageBreadcrumb current={view === "talents" ? "Tìm nhân tài" : "Quản lý CV"} root={null} />
+        <h1 className="er-page-title">{view === "talents" ? "Tìm nhân tài" : "Quản lý CV"}</h1>
+        {view === "talents" ? <TalentDiscoveryTabs /> : <RecruitmentTabs />}
         {(error || metadata.error) && (
           <p role="alert" className="er-error">
             {error || metadata.error}
@@ -259,7 +262,8 @@ function Candidates({ view, metadata, attempt, open, action, pending, refresh })
         <div>
           {talent ? (
             <>
-              <h1>Kho Tài Năng Tiềm Năng - Toàn Doanh Nghiệp</h1>
+              <h2>Đã lưu tài năng</h2>
+              <p>Kho hồ sơ đã lưu của doanh nghiệp. Thêm ghi chú và gán hồ sơ vào chiến dịch.</p>
               <p>
                 Tổng cộng: <b>{result?.poolCount ?? "—"}</b> hồ sơ • Sẵn sàng nhận việc:{" "}
                 <b className="er-green">
@@ -343,8 +347,8 @@ function Candidates({ view, metadata, attempt, open, action, pending, refresh })
                 <small>Vòng tuyển dụng</small>
               </button>
             ))}
-            <Link to="/employer/talents">
-              Talent Pool<small>Kho lưu trữ & tái kết nối</small>
+            <Link to="/employer/discover?collection=saved">
+              Đã lưu tài năng<small>Tìm nhân tài & tái kết nối</small>
             </Link>
           </div>
           {metadata.pendingImports > 0 && (
@@ -785,7 +789,7 @@ function Interviews({ attempt, open, refresh, action, pending }) {
       <div className="er-calendar-heading">
         <div>
           <small>ĐIỀU PHỐI LỊCH PHỎNG VẤN</small>
-          <h1>Lịch phỏng vấn & Đánh giá ứng viên</h1>
+          <h2>Lịch phỏng vấn & đánh giá</h2>
         </div>
         <button className="er-primary" onClick={() => open({ type: "schedule" })}>
           <Plus />

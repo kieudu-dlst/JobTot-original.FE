@@ -120,6 +120,17 @@
   background: #fff4ed;
   color: #ea580c;
 }
+.mobile-menu-custom a[aria-current="page"] {
+  background: #fff4ed;
+  color: var(--color-auth-orange);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+.mobile-menu-custom a[aria-current="page"] svg {
+  color: currentColor;
+}
 .mobile-menu-auth {
   display: flex;
   gap: 10px;

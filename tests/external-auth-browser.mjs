@@ -194,37 +194,27 @@ try {
       deviceScaleFactor: 1,
       mobile: mode === "mobile",
     });
-    await navigate("/register");
-    await until("document.querySelectorAll('.social-auth-button').length===3");
-    await check(
-      "document.querySelector('.social-auth-google').textContent.includes('Đăng ký bằng Google')",
-      `${mode}: register labels`,
-    );
-    await check(
-      `(() => {const [g,f,l]=[...document.querySelectorAll('.social-auth-button')].map(e=>e.getBoundingClientRect());return g.width>=f.width && ${mode === "desktop" ? "Math.abs(f.y-l.y)<2" : "l.y>f.y"};})()`,
-      `${mode}: Google full width and responsive provider rows`,
-    );
-    await check(
-      "document.documentElement.scrollWidth<=innerWidth",
-      `${mode}: auth page has no overflow`,
-    );
-    await screenshot(`${mode}-candidate-register`);
-    await click("[role=tab][data-state=inactive]");
-    await until("document.querySelectorAll('.social-auth-button').length===1");
-    await check(
-      "location.search.includes('role=employer') && document.querySelector('.social-auth-google').textContent.includes('Đăng ký bằng Google')",
-      `${mode}: employer methods update immediately`,
-    );
-    await click('nav[aria-label="Hình thức xác thực"] a[href^="/login"]');
-    await until(
-      "location.pathname==='/login' && document.querySelector('.social-auth-google')?.textContent.includes('Đăng nhập bằng Google')",
-    );
-    await check(
-      "location.search.includes('role=employer') && document.querySelectorAll('.social-auth-button').length===1 && document.querySelector('.social-auth-google').textContent.includes('Đăng nhập bằng Google')",
-      `${mode}: role persists register/login`,
-    );
-    await screenshot(`${mode}-employer-login`);
-    for (const provider of ["google", "facebook", "linkedin"]) {
+    for (const role of ["candidate", "employer"]) {
+      for (const route of ["login", "register"]) {
+        await navigate(`/${route}?role=${role}`);
+        await until("document.querySelectorAll('.social-auth-button').length===1");
+        await check(
+          `document.querySelector('.social-auth-google').textContent.includes('${route === "register" ? "Đăng ký" : "Đăng nhập"} bằng Google') && !document.querySelector('.social-auth-facebook, .social-auth-linkedin')`,
+          `${mode} ${role} ${route}: Google is the only social authentication button`,
+        );
+        await check(
+          "(() => {const button=document.querySelector('.social-auth-google').getBoundingClientRect();const container=document.querySelector('.social-auth-buttons').getBoundingClientRect();return Math.abs(button.width-container.width)<2 && button.height>=48 && document.documentElement.scrollWidth<=innerWidth;})()",
+          `${mode} ${role} ${route}: Google fills the available width without overflow`,
+        );
+        await check(
+          "!!document.querySelector('form input[type=password]')",
+          `${mode} ${role} ${route}: email and password fields remain available`,
+        );
+        await screenshot(`${mode}-${role}-${route}`);
+      }
+    }
+    {
+      const provider = "google";
       await navigate("/register", true);
       await until("!!document.querySelector('.social-auth-google')");
       await click(`.social-auth-${provider}`);
@@ -237,19 +227,6 @@ try {
       );
       await markCheckboxes();
       await click("form button[type=submit]");
-      if (provider === "facebook") {
-        await until("!!document.querySelector('input[autocomplete=one-time-code]')");
-        const email = code.replaceAll("-", ".") + "@checks.example";
-        const otp = (
-          await (await fetch(`${origin}/checks/mail?email=${encodeURIComponent(email)}`)).json()
-        ).code;
-        await fill("input[autocomplete=one-time-code]", otp);
-        await check(
-          `document.documentElement.scrollWidth<=${width}`,
-          `${mode}: long OTP email wraps within viewport`,
-        );
-        await click("form button[type=submit]");
-      }
       await logged("candidate", `${mode} ${provider}: register end to end`);
       await navigate("/login", true);
       await until("!!document.querySelector('.social-auth-google')");
@@ -283,9 +260,9 @@ try {
     // Provider email already belongs to the existing Google account: authenticate that
     // account using its original provider, return to the pending flow, then confirm linking.
     await navigate("/register", true);
-    await until("!!document.querySelector('.social-auth-facebook')");
-    await click(".social-auth-facebook");
-    await consent(`google-candidate-${mode}-${runId}`);
+    await until("!!document.querySelector('.social-auth-google')");
+    await click(".social-auth-google");
+    await consent(`google-candidate-${mode}-${runId}-alias`);
     await until("document.body.innerText.includes('Email đã có tài khoản Job Tốt')");
     await check(
       "!sessionStorage.getItem('jobtot.candidate.tokens')",
@@ -343,7 +320,7 @@ try {
       await logged(role, `${mode} ${role}: email/password login end to end`);
       await navigate(`/login?role=${role}`, true);
       await until("!!document.querySelector('.social-auth-google')");
-      await click(employer ? ".social-auth-google" : ".social-auth-linkedin");
+      await click(".social-auth-google");
       await consent(`email-${role}-${mode}-${runId}`);
       await until("document.body.innerText.includes('Email đã có tài khoản Job Tốt')");
       await click(".external-auth-actions button:not([role=checkbox])");

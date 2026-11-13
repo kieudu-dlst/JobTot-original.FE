@@ -3,8 +3,7 @@
 }
 .social-auth-buttons {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
 }
 .social-auth-button {
   display: flex;
@@ -20,9 +19,6 @@
   font-weight: 650;
   color: #26384c;
   cursor: pointer;
-}
-.social-auth-google {
-  grid-column: 1 / -1;
 }
 .social-auth-button:hover {
   border-color: var(--color-auth-orange);
@@ -43,13 +39,6 @@
 }
 .social-auth-google .social-auth-mark {
   color: #4285f4;
-}
-.social-auth-facebook .social-auth-mark {
-  color: #1877f2;
-}
-.social-auth-linkedin .social-auth-mark {
-  color: #0a66c2;
-  font-size: 17px;
 }
 .social-auth-message {
   margin-top: 12px;
@@ -75,9 +64,4 @@
 .external-auth-actions button:not([role="checkbox"]):disabled {
   opacity: 0.6;
   cursor: wait;
-}
-@media (max-width: 450px), (min-width: 701px) and (max-width: 1050px) {
-  .social-auth-buttons {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }

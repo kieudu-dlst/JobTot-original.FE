@@ -1,0 +1,67 @@
+.social-auth {
+  margin-top: 22px;
+}
+.social-auth-buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.social-auth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid #dce3eb;
+  border-radius: 10px;
+  background: white;
+  font-size: 13px;
+  font-weight: 650;
+  color: #26384c;
+  cursor: pointer;
+}
+.social-auth-button:hover {
+  border-color: var(--color-auth-orange);
+  background: #fff8f4;
+}
+.social-auth-button:focus-visible {
+  outline: 2px solid var(--color-auth-orange);
+  outline-offset: 3px;
+}
+.social-auth-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+.social-auth-mark {
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 800;
+}
+.social-auth-google .social-auth-mark {
+  color: #4285f4;
+}
+.social-auth-message {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff4ed;
+  color: #9b3528;
+  font-size: 13px;
+}
+.external-auth-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+.external-auth-actions button:not([role="checkbox"]) {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--color-auth-orange);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+.external-auth-actions button:not([role="checkbox"]):disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

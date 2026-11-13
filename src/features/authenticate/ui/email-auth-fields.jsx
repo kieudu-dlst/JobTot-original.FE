@@ -2,14 +2,14 @@ export function EmailAuthFields({ flow, pending, report }) {
   return (
     <>
       {flow.challenge && (
-        <div className="rounded-lg border border-orange-100 bg-orange-50 p-4 text-sm">
+        <div className="min-w-0 rounded-lg border border-orange-100 bg-orange-50 p-4 text-sm [overflow-wrap:anywhere]">
           <p className="mb-3">
             Mã xác thực đã gửi tới <strong>{flow.challenge.email}</strong>. Mã có hiệu lực 10 phút.
           </p>
           <label className="grid gap-2">
             Mã xác thực email
             <input
-              className="rounded-md border bg-white p-2"
+              className="min-w-0 w-full rounded-md border bg-white p-2"
               autoComplete="one-time-code"
               inputMode="numeric"
               maxLength={6}

@@ -495,6 +495,10 @@
   width: 100%;
   min-width: 0;
 }
+/* Keep placeholders out of both native and base-select pickers. */
+.campaign-page select.ui-select[data-ui="select"] option[hidden] {
+  display: none;
+}
 .cp-field-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -598,9 +602,6 @@
 .cp-markdown-preview h4 {
   font-size: 14px;
   font-weight: 700;
-}
-.cp-markdown-preview p {
-  white-space: pre-wrap;
 }
 .cp-tag-input {
   display: flex;

@@ -11,7 +11,6 @@ import {
   Plus,
   CheckCircle2,
   Eye,
-  KeyRound,
   Pencil,
   Power,
 } from "lucide-react";
@@ -30,7 +29,7 @@ const sections = {
   users: {
     label: "Người dùng",
     title: "Quản lý người dùng",
-    description: "Quản lý tài khoản, quyền truy cập và mật khẩu người dùng.",
+    description: "Quản lý tài khoản và quyền truy cập của người dùng.",
     icon: Users,
   },
   industries: {
@@ -119,18 +118,7 @@ function AdminSection({ section, me, onExpired }) {
         await adminApi.status(section, editor.row.id, editor.row.status !== "Active");
       else if (editor.type === "verification")
         await adminApi.verify(editor.row.id, values.get("verification"));
-      else if (editor.type === "password") {
-        if (values.get("password") !== values.get("confirm")) {
-          setDialogError("Mật khẩu xác nhận không khớp.");
-          return;
-        }
-        await adminApi.password(editor.row.id, values.get("password"));
-        if (editor.row.id === me.id) {
-          clearAdminSession();
-          onExpired();
-          return;
-        }
-      } else await adminApi.industry(editor.row?.id, values.get("name"));
+      else await adminApi.industry(editor.row?.id, values.get("name"));
       setEditor(null);
       setAttempt((value) => value + 1);
       notify("Đã cập nhật thành công.");
@@ -309,17 +297,12 @@ function AdminSection({ section, me, onExpired }) {
                               Xem & xác minh
                             </button>
                           </>
-                        ) : section === "users" ? (
-                          <button onClick={() => open({ type: "password", row })}>
-                            <KeyRound />
-                            Đổi mật khẩu
-                          </button>
-                        ) : (
+                        ) : section === "industries" ? (
                           <button onClick={() => open({ type: "industry", row })}>
                             <Pencil />
                             Sửa tên
                           </button>
-                        )}
+                        ) : null}
                         <button
                           disabled={
                             section === "users" && row.id === me.id && row.status === "Active"
@@ -366,13 +349,11 @@ function AdminSection({ section, me, onExpired }) {
                   ? editor.row.status === "Active"
                     ? "Ngừng hoạt động"
                     : "Kích hoạt"
-                  : editor.type === "password"
-                    ? "Đổi mật khẩu người dùng"
-                    : editor.type === "verification"
-                      ? "Xác minh thông tin công ty"
-                      : editor.row
-                        ? "Sửa nhóm ngành"
-                        : "Thêm nhóm ngành"}
+                  : editor.type === "verification"
+                    ? "Xác minh thông tin công ty"
+                    : editor.row
+                      ? "Sửa nhóm ngành"
+                      : "Thêm nhóm ngành"}
               </DialogTitle>
               <DialogDescription>
                 {editor.row?.name ||
@@ -408,35 +389,6 @@ function AdminSection({ section, me, onExpired }) {
                   <p className="admin-dialog-hint">
                     Kiểm tra thông tin trước khi duyệt. Công ty cần có tên pháp lý, mã số thuế,
                     email và địa chỉ.
-                  </p>
-                </>
-              )}
-              {editor.type === "password" && (
-                <>
-                  <label>
-                    Mật khẩu mới
-                    <input
-                      type="password"
-                      name="password"
-                      required
-                      minLength={12}
-                      maxLength={128}
-                      autoComplete="new-password"
-                    />
-                  </label>
-                  <label>
-                    Xác nhận mật khẩu
-                    <input
-                      type="password"
-                      name="confirm"
-                      required
-                      minLength={12}
-                      maxLength={128}
-                      autoComplete="new-password"
-                    />
-                  </label>
-                  <p className="admin-dialog-hint">
-                    Tối thiểu 12 ký tự. Tất cả phiên đăng nhập cũ của người dùng sẽ bị thu hồi.
                   </p>
                 </>
               )}

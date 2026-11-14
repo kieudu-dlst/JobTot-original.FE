@@ -19,7 +19,7 @@ const sections = {
   users: {
     label: "Người dùng",
     title: "Quản lý người dùng",
-    description: "Quản lý tài khoản, quyền truy cập và mật khẩu người dùng.",
+    description: "Quản lý tài khoản và quyền truy cập của người dùng.",
     icon: Users,
   },
   industries: {

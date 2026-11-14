@@ -28,6 +28,7 @@ import { AuthFooter } from "@/widgets/auth-footer";
 import { PageBreadcrumb } from "@/shared/ui/page-breadcrumb";
 import { useEmployerSession } from "@/features/authenticate";
 import { recruitmentRequest, mutate } from "../api/candidates";
+import { interviewFeedbackForm } from "../model/interview-feedback";
 import "./employer-candidates.css";
 
 const titles = {
@@ -1004,9 +1005,7 @@ function RecruitmentDialog({ dialog, metadata, close, action, pending, error }) 
     end: "",
     location: "",
     meetingUrl: "",
-    score: 5,
-    decision: "Consider",
-    comment: "",
+    ...interviewFeedbackForm(dialog.item),
   }));
   const campaign =
     dialog.campaign || metadata.campaigns.find((item) => item.id === form.campaignId);

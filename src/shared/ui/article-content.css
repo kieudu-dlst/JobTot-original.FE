@@ -1,0 +1,130 @@
+/* The editor, preview and published article use exactly these content rules. */
+.article-body {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+  color: #263449;
+  font:
+    400 16px/1.9 "Inter",
+    "Roboto",
+    sans-serif;
+  overflow-wrap: anywhere;
+  overflow-x: auto;
+}
+.article-body :is(p, ul, ol, blockquote, pre, table) {
+  margin-block: 12px;
+}
+.article-body p {
+  min-height: 1.9em;
+}
+.article-body > :first-child {
+  margin-top: 0;
+}
+.article-body > :last-child {
+  margin-bottom: 0;
+}
+.article-body :is(h2, h3, h4, h5, h6) {
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 24px 0 12px;
+}
+.article-body h2 {
+  font-size: 25px;
+}
+.article-body h3 {
+  font-size: 22px;
+}
+.article-body h4 {
+  font-size: 20px;
+}
+.article-body h5 {
+  font-size: 18px;
+}
+.article-body h6 {
+  font-size: 16px;
+}
+.article-body :is(strong, b) {
+  font-weight: 700;
+}
+.article-body :is(em, i) {
+  font-style: italic;
+}
+.article-body u {
+  text-decoration: underline;
+}
+.article-body :is(s, del) {
+  text-decoration: line-through;
+}
+.article-body :is(ul, ol) {
+  padding-inline-start: 26px;
+}
+.article-body ul {
+  list-style: disc;
+}
+.article-body ol {
+  list-style: decimal;
+}
+.article-body li {
+  margin-block: 6px;
+}
+.article-body li > p {
+  margin-block: 0;
+}
+.article-body blockquote {
+  border-inline-start: 3px solid #ff5722;
+  background: #fff7f2;
+  padding: 8px 18px;
+}
+.article-body a {
+  color: #b63c12;
+  text-decoration: underline;
+}
+.article-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-block: 16px;
+}
+.article-body table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+.article-body :is(td, th) {
+  box-sizing: border-box;
+  min-width: 50px;
+  border: 1px solid #8c9caf;
+  padding: 8px 10px;
+  vertical-align: top;
+  position: relative;
+}
+.article-body th {
+  background: #f1f5f9;
+  font-weight: 700;
+  text-align: left;
+}
+.article-body :is(td, th) > :first-child {
+  margin-top: 0;
+}
+.article-body :is(td, th) > :last-child {
+  margin-bottom: 0;
+}
+.article-body pre {
+  overflow-x: auto;
+  background: #f1f5f9;
+  padding: 14px;
+  border-radius: 6px;
+}
+.article-body code {
+  background: #f1f5f9;
+  font:
+    0.9em ui-monospace,
+    monospace;
+}
+.article-body hr {
+  border: 0;
+  border-top: 1px solid #cbd5e1;
+  margin-block: 20px;
+}

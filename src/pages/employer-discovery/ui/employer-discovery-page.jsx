@@ -1,6 +1,5 @@
 import { Select } from "@/shared/ui/select";
-import { SectionTabs } from "@/shared/ui/section-tabs";
-import { RecruitmentTabs } from "@/widgets/recruitment-tabs";
+import { TalentDiscoveryTabs } from "@/widgets/recruitment-tabs";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, Navigate, useSearchParams } from "react-router-dom";
 import {
@@ -43,11 +42,6 @@ const emptyFilters = {
   readiness: "",
   minScore: "",
 };
-const collections = [
-  ["all", "Khám phá hồ sơ", UsersRound],
-  ["interested", "Đang quan tâm", Heart],
-  ["saved", "Đã lưu tài năng", Bookmark],
-];
 
 function useDiscovery(path, attempt = 0, onLoaded) {
   const [state, setState] = useState({ path: null, data: null, error: "", loading: true });
@@ -186,21 +180,16 @@ function Discovery({ account }) {
   return (
     <div className="talent-discovery font-roboto">
       <title>Tìm nhân tài | Job Tốt</title>
-      <EmployerHeader userName={account.fullName} active="candidates" />
+      <EmployerHeader userName={account.fullName} />
       <main className="page-container company-container td-container">
-        <PageBreadcrumb current="Quản lý ứng viên" root={null} />
-        <RecruitmentTabs active="discover" />
+        <PageBreadcrumb current="Tìm nhân tài" root={null} />
         <section className="td-hero">
           <div className="td-hero-copy">
             <span className="td-eyebrow">
               <span />
               KẾT NỐI ĐÚNG NGƯỜI, CHO ĐÚNG CƠ HỘI
             </span>
-            <h1>
-              Tìm nhân tài.
-              <br />
-              <em>Phát triển đội ngũ.</em>
-            </h1>
+            <h1>Tìm nhân tài</h1>
             <p>
               Khám phá hồ sơ triển vọng, đối chiếu với nhu cầu tuyển dụng và giữ kết nối với những
               ứng viên bạn quan tâm.
@@ -246,18 +235,7 @@ function Discovery({ account }) {
           </div>
         </section>
 
-        <SectionTabs
-          className="td-collections"
-          label="Danh sách hồ sơ"
-          active={collection}
-          onChange={(value) => change({ collection: value })}
-          items={collections.map(([value, label, icon]) => ({
-            value,
-            label,
-            icon,
-            count: stats ? stats[value === "all" ? "discoverable" : value] : "—",
-          }))}
-        />
+        <TalentDiscoveryTabs stats={stats} />
         {metadata.error ? (
           <Failure error={metadata.error} retry={() => setAttempt((value) => value + 1)} />
         ) : !metadata.data ? (
@@ -505,7 +483,7 @@ function Discovery({ account }) {
                   </p>
                 </div>
                 <Link to="/employer/talents">
-                  Mở danh sách
+                  Quản lý danh sách đã lưu
                   <ArrowUpRight />
                 </Link>
               </div>

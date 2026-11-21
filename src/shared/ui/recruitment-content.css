@@ -1,0 +1,78 @@
+.recruitment-content {
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+.recruitment-content p,
+.recruitment-content ul,
+.recruitment-content ol,
+.recruitment-content blockquote,
+.recruitment-content pre,
+.recruitment-content table {
+  margin-block: 0 1em;
+}
+.recruitment-content > :last-child {
+  margin-bottom: 0;
+}
+.recruitment-content :is(ul, ol) {
+  padding-inline-start: 1.6em;
+}
+.recruitment-content ul {
+  list-style: disc;
+}
+.recruitment-content ol {
+  list-style: decimal;
+}
+.recruitment-content li {
+  display: list-item;
+  margin-block: 0.35em;
+}
+.recruitment-content li > :is(ul, ol) {
+  margin-block: 0.35em 0;
+}
+.recruitment-content :is(strong, b) {
+  font-weight: 700;
+}
+.recruitment-content :is(em, i) {
+  font-style: italic;
+}
+.recruitment-content :is(u, ins) {
+  text-decoration: underline;
+}
+.recruitment-content :is(s, del) {
+  text-decoration: line-through;
+}
+.recruitment-content :is(h3, h4, h5, h6) {
+  margin-block: 1em 0.5em;
+  font-size: 1.1em;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.recruitment-content blockquote {
+  border-inline-start: 3px solid #cbd5e1;
+  padding-inline-start: 1em;
+}
+.recruitment-content pre {
+  overflow-x: auto;
+  padding: 12px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  white-space: pre;
+}
+.recruitment-content code {
+  font-family: monospace;
+  background: #f1f5f9;
+}
+.recruitment-content a {
+  color: #156da8;
+  text-decoration: underline;
+}
+.recruitment-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+.recruitment-content :is(th, td) {
+  border: 1px solid #dce2ef;
+  padding: 6px 10px;
+}

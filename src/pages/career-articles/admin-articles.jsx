@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/shared/
 import { AdminLayout } from "@/widgets/admin-layout";
 import { adminRequest, adminJson } from "@/shared/api/admin-session";
 import { useToast } from "@/shared/ui/toast-context";
+import { ARTICLE_MAX_LENGTH, hasArticleContent } from "@/shared/lib/article-content";
 import { MarkdownEditor } from "./markdown-editor";
 import "./articles.css";
 
@@ -76,6 +77,17 @@ function Editor({ onExpired }) {
   async function save(event) {
     event.preventDefault();
     if (busy) return;
+    if (
+      draft.content.length > ARTICLE_MAX_LENGTH ||
+      (draft.published && !hasArticleContent(draft.content))
+    ) {
+      setError(
+        draft.content.length > ARTICLE_MAX_LENGTH
+          ? "Nội dung quá dài. Hãy rút gọn bài hoặc giảm số ô bảng trước khi lưu."
+          : "Nhập nội dung trước khi xuất bản.",
+      );
+      return;
+    }
     setBusy(true);
     setError("");
     let persisted;
@@ -218,6 +230,7 @@ function Editor({ onExpired }) {
               )}
             </div>
             <MarkdownEditor
+              key={draft.id || "new"}
               value={draft.content}
               onChange={(value) => patch("content", value)}
               required={draft.published}

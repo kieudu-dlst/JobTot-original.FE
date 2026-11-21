@@ -309,32 +309,8 @@
   width: 18px;
   height: 18px;
 }
-.jd-description p {
-  margin-bottom: 15px;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-.jd-description p:last-child {
-  margin-bottom: 0;
-}
-.jd-requirements {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 0;
-  list-style: none;
+.job-detail-page .recruitment-content {
   color: #7b879a;
-}
-.jd-requirements li {
-  display: flex;
-  gap: 10px;
-}
-.jd-requirements svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  margin-top: 4px;
-  color: #27bf9a;
 }
 .jd-timeline {
   list-style: none;

@@ -7,7 +7,6 @@ import {
   Banknote,
   BriefcaseBusiness,
   CalendarClock,
-  CheckCircle2,
   ChevronRight,
   FileText,
   Gift,
@@ -23,6 +22,7 @@ import { SaveJobButton } from "@/features/save-job";
 import { ApplicationForm } from "@/features/apply-job";
 import { useCandidateSession } from "@/features/authenticate";
 import { useToast } from "@/shared/ui/toast-context";
+import { RecruitmentContent } from "@/shared/ui/recruitment-content";
 import { AuthHeader } from "@/widgets/auth-header";
 import { AuthFooter } from "@/widgets/auth-footer";
 import { CareerResources } from "@/widgets/career-resources";
@@ -261,11 +261,7 @@ function JobDetail({ id }) {
                     <FileText />
                     Mô tả công việc
                   </h2>
-                  <div className="jd-description">
-                    {lines(job.description).map((line, index) => (
-                      <p key={index}>{line}</p>
-                    ))}
-                  </div>
+                  <RecruitmentContent className="jd-description" content={job.description} />
                 </section>
                 <section className="jd-panel">
                   <h2>
@@ -273,14 +269,7 @@ function JobDetail({ id }) {
                     Yêu cầu ứng viên
                   </h2>
                   {job.requirements ? (
-                    <ul className="jd-requirements">
-                      {lines(job.requirements).map((line, index) => (
-                        <li key={index}>
-                          <CheckCircle2 />
-                          <span>{line.replace(/^[-•]\s*/, "")}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <RecruitmentContent content={job.requirements} />
                   ) : (
                     <p>Nhà tuyển dụng chưa cập nhật yêu cầu chi tiết.</p>
                   )}

@@ -10,8 +10,6 @@ export const adminApi = {
       method: "PUT",
       ...adminJson({ verificationStatus }),
     }),
-  password: (id, password) =>
-    adminRequest(`users/${id}/password`, { method: "PUT", ...adminJson({ password }) }),
   industry: (id, name) =>
     adminRequest(`industries${id ? `/${id}` : ""}`, {
       method: id ? "PUT" : "POST",

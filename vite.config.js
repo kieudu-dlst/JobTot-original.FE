@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      "/api": { target: "http://localhost:5049", changeOrigin: false },
+      "/api": { target: "http://localhost:5049", changeOrigin: false, ws: true },
       "/uploads/companies": { target: "http://localhost:5049", changeOrigin: false },
       "/uploads/avatars": { target: "http://localhost:5049", changeOrigin: false },
       "/uploads/cv-decorations": { target: "http://localhost:5049", changeOrigin: false },

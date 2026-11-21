@@ -1,5 +1,5 @@
 import { formatDateTime } from "@/shared/lib/date-format";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react";
 import {
   Search,
   MessageCircle,
@@ -12,12 +12,37 @@ import {
 import { AuthHeader, EmployerHeader } from "@/widgets/auth-header";
 import { AuthFooter } from "@/widgets/auth-footer";
 import { PageBreadcrumb } from "@/shared/ui/page-breadcrumb";
-import { messagesApi } from "../model/messages-api";
+import { messagesApi, chatRequest } from "../model/messages-api";
+import { createChatSocket } from "../model/chat-socket";
 import { useTyping } from "../model/use-typing";
 import { useSearchParams } from "react-router-dom";
 import { mediaUrl } from "@/shared/lib/media-url";
 
 export function AccountChat({ session, employer }) {
+  const chat = useMemo(
+    () =>
+      createChatSocket(employer, {
+        request: (path, options) => chatRequest(employer, path, options),
+      }),
+    [employer],
+  );
+  const [connected, setConnected] = useState(false);
+  const [connectionError, setConnectionError] = useState("");
+  useEffect(() => {
+    const unsubscribe = chat.subscribe((event) => {
+      if (event.type === "ready") {
+        setConnected(true);
+        setConnectionError("");
+      }
+      if (event.type === "disconnected") setConnected(false);
+      if (event.type === "error") setConnectionError(event.message);
+    });
+    chat.start();
+    return () => {
+      unsubscribe();
+      chat.stop();
+    };
+  }, [chat]);
   const [searchParams] = useSearchParams();
   const recruiterEmail = searchParams.get("hr");
   const companyId = searchParams.get("company");
@@ -75,7 +100,14 @@ export function AccountChat({ session, employer }) {
   }, [recruiterEmail, companyId, contactAccountId, employer, attempt]);
   useEffect(() => {
     const controller = new AbortController();
+    let running = false,
+      dirty = false;
     const load = async () => {
+      if (running) {
+        dirty = true;
+        return;
+      }
+      running = true;
       try {
         const rows = await messagesApi(employer, "", { signal: controller.signal });
         if (!controller.signal.aborted) {
@@ -92,16 +124,25 @@ export function AccountChat({ session, employer }) {
           setError(cause.message);
           setLoading(false);
         }
+      } finally {
+        running = false;
+        if (dirty && !controller.signal.aborted) {
+          dirty = false;
+          load();
+        }
       }
     };
-    const timer = setTimeout(load, 0),
-      interval = setInterval(load, 5000);
+    const timer = setTimeout(load, 0);
+    const unsubscribe = chat.subscribe((event) => {
+      if (event.type === "ready" || event.type === "message") load();
+      if (event.type === "read") window.dispatchEvent(new Event("account-read-updated"));
+    });
     return () => {
       clearTimeout(timer);
-      clearInterval(interval);
+      unsubscribe();
       controller.abort();
     };
-  }, [employer, attempt, contactConversation]);
+  }, [employer, attempt, contactConversation, chat]);
   useEffect(() => {
     if (query.trim().length < 2) return;
     const controller = new AbortController();
@@ -172,6 +213,11 @@ export function AccountChat({ session, employer }) {
             Làm mới
           </button>
         </div>
+        {!connected && (
+          <p role="status">
+            {connectionError || "Đang kết nối chat… Tin nhắn sẽ được đồng bộ khi kết nối trở lại."}
+          </p>
+        )}
         {(error || contactError) && (
           <p role="alert" className="chat-error">
             {contactError || error}
@@ -256,6 +302,7 @@ export function AccountChat({ session, employer }) {
           {active ? (
             <MessageThread
               key={active.id}
+              chat={chat}
               conversation={active}
               accountId={session.account.id}
               employer={employer}
@@ -280,8 +327,8 @@ export function AccountChat({ session, employer }) {
   );
 }
 
-function MessageThread({ conversation, accountId, employer, back, sent }) {
-  const { peerTyping, updateTyping, stopTyping } = useTyping(employer, conversation.id);
+function MessageThread({ conversation, accountId, employer, back, sent, chat }) {
+  const { peerTyping, updateTyping, stopTyping } = useTyping(chat, conversation.id, accountId);
   const [messages, setMessages] = useState([]),
     [draft, setDraft] = useState(""),
     [error, setError] = useState(""),
@@ -295,9 +342,13 @@ function MessageThread({ conversation, accountId, employer, back, sent }) {
     cursor = useRef(null);
   useEffect(() => {
     const controller = new AbortController();
-    let running = false;
+    let running = false,
+      dirty = false;
     const load = async () => {
-      if (running) return;
+      if (running) {
+        dirty = true;
+        return;
+      }
       running = true;
       try {
         const data = await messagesApi(
@@ -308,22 +359,34 @@ function MessageThread({ conversation, accountId, employer, back, sent }) {
         if (!controller.signal.aborted) {
           setMessages((current) => mergeMessages(current, data.items));
           if (cursor.current === null) setHasMore(data.hasMore);
+          const catchingUp = cursor.current !== null;
           cursor.current = data.items.at(-1)?.id ?? cursor.current ?? 0;
+          if (catchingUp && data.items.length === 50) dirty = true;
         }
       } catch (cause) {
         if (!controller.signal.aborted) setError(cause.message);
       } finally {
         running = false;
+        if (dirty && !controller.signal.aborted) {
+          dirty = false;
+          load();
+        }
       }
     };
-    const timer = setTimeout(load, 0),
-      interval = setInterval(load, 5000);
+    const timer = setTimeout(load, 0);
+    const unsubscribe = chat.subscribe((event) => {
+      if (
+        event.type === "ready" ||
+        (event.type === "message" && event.conversationId === conversation.id)
+      )
+        load();
+    });
     return () => {
       clearTimeout(timer);
-      clearInterval(interval);
+      unsubscribe();
       controller.abort();
     };
-  }, [conversation.id, employer]);
+  }, [conversation.id, employer, chat]);
   useEffect(() => {
     const controller = new AbortController();
     const mark = async () => {
@@ -334,11 +397,8 @@ function MessageThread({ conversation, accountId, employer, back, sent }) {
       if (!ids.length) return;
       try {
         for (let offset = 0; offset < ids.length; offset += 100) {
-          await messagesApi(employer, `/${conversation.id}/read`, {
-            method: "PUT",
-            signal: controller.signal,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ messageIds: ids.slice(offset, offset + 100) }),
+          await chat.invoke("read", conversation.id, {
+            messageIds: ids.slice(offset, offset + 100),
           });
         }
         if (!controller.signal.aborted) window.dispatchEvent(new Event("account-read-updated"));
@@ -353,7 +413,7 @@ function MessageThread({ conversation, accountId, employer, back, sent }) {
       controller.abort();
       document.removeEventListener("visibilitychange", mark);
     };
-  }, [messages, accountId, employer, conversation.id]);
+  }, [messages, accountId, conversation.id, chat]);
   useLayoutEffect(() => {
     if (list.current && !keepScroll.current) list.current.scrollTop = list.current.scrollHeight;
     keepScroll.current = false;
@@ -383,11 +443,7 @@ function MessageThread({ conversation, accountId, employer, back, sent }) {
     if (!pending.current || pending.current.text !== text)
       pending.current = { text, clientMessageId: crypto.randomUUID() };
     try {
-      const message = await messagesApi(employer, `/${conversation.id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(pending.current),
-      });
+      const message = await chat.invoke("send", conversation.id, pending.current);
       setMessages((current) => mergeMessages(current, [message]));
       setDraft("");
       pending.current = null;

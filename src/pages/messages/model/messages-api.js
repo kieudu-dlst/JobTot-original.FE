@@ -2,6 +2,9 @@ import { readResponseJson } from "@/shared/api/read-response-json";
 import { candidateFetch } from "@/shared/api/candidate-session";
 import { employerFetch } from "@/shared/api/employer-session";
 
+export const chatRequest = (employer, path, options) =>
+  (employer ? employerFetch : candidateFetch)(path, options);
+
 export async function messagesApi(employer, path = "", options = {}) {
   const response = await (employer ? employerFetch : candidateFetch)(`messages${path}`, options);
   const data = await readResponseJson(response);

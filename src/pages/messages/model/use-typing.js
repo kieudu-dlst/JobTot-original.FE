@@ -1,25 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { messagesApi } from "./messages-api";
 
-export function useTyping(employer, conversationId) {
+export function useTyping(chat, conversationId, accountId) {
   const [peerTyping, setPeerTyping] = useState(false);
   const activity = useRef({ active: false, lastSent: 0, idleTimer: null });
   const queue = useRef(Promise.resolve());
   const notify = useCallback(
     (isTyping) => {
-      // Serialize updates so a delayed heartbeat cannot arrive after the stop event.
       queue.current = queue.current
         .catch(() => {})
-        .then(() =>
-          messagesApi(employer, `/${conversationId}/typing`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ isTyping }),
-          }),
-        )
+        .then(() => chat.invoke("typing", conversationId, { isTyping }))
         .catch(() => {});
     },
-    [employer, conversationId],
+    [chat, conversationId],
   );
   const stopTyping = useCallback(() => {
     clearTimeout(activity.current.idleTimer);
@@ -41,47 +33,37 @@ export function useTyping(employer, conversationId) {
     },
     [notify, stopTyping],
   );
-
   useEffect(() => {
-    const controller = new AbortController();
-    let running = false,
-      expiryTimer;
-    const load = async () => {
-      if (running || document.visibilityState === "hidden") return;
-      running = true;
-      try {
-        const data = await messagesApi(employer, `/${conversationId}/typing`, {
-          signal: controller.signal,
-        });
-        if (controller.signal.aborted) return;
-        clearTimeout(expiryTimer);
-        const remaining = new Date(data.expiresAt).getTime() - Date.now();
-        const visible = data.isTyping === true && remaining > 0;
-        setPeerTyping(visible);
-        if (visible) expiryTimer = setTimeout(() => setPeerTyping(false), remaining);
-      } catch {
-        if (!controller.signal.aborted) setPeerTyping(false);
-      } finally {
-        running = false;
+    let expiry;
+    const unsubscribe = chat.subscribe((event) => {
+      if (event.type === "disconnected" || event.type === "ready") {
+        clearTimeout(expiry);
+        setPeerTyping(false);
       }
+      if (
+        event.type !== "typing" ||
+        event.conversationId !== conversationId ||
+        event.accountId === accountId
+      )
+        return;
+      clearTimeout(expiry);
+      const remaining = new Date(event.data.expiresAt).getTime() - Date.now();
+      const visible = event.data.isTyping && remaining > 0;
+      setPeerTyping(visible);
+      if (visible) expiry = setTimeout(() => setPeerTyping(false), remaining);
+    });
+    const hidden = () => {
+      if (document.visibilityState === "hidden") stopTyping();
     };
-    const visibility = () => {
-      if (document.visibilityState === "hidden") setPeerTyping(false);
-      else load();
-    };
-    const timer = setTimeout(load, 0),
-      interval = setInterval(load, 1000);
-    document.addEventListener("visibilitychange", visibility);
+    document.addEventListener("visibilitychange", hidden);
     window.addEventListener("pagehide", stopTyping);
     return () => {
-      clearTimeout(timer);
-      clearInterval(interval);
-      clearTimeout(expiryTimer);
-      controller.abort();
+      unsubscribe();
+      clearTimeout(expiry);
       stopTyping();
-      document.removeEventListener("visibilitychange", visibility);
+      document.removeEventListener("visibilitychange", hidden);
       window.removeEventListener("pagehide", stopTyping);
     };
-  }, [employer, conversationId, stopTyping]);
+  }, [chat, conversationId, accountId, stopTyping]);
   return { peerTyping, updateTyping, stopTyping };
 }

@@ -30,6 +30,8 @@ async function request(path, options = {}, authenticated = false) {
         : data?.detail || fallback[response.status] || "Yêu cầu không thành công.",
     );
     error.status = response.status;
+    error.retryAfterSeconds =
+      Number(data?.retryAfterSeconds || response.headers.get("Retry-After")) || 0;
     error.changeToken = data?.changeToken;
     error.fields = Object.fromEntries(
       Object.entries(data?.errors || {}).map(([key, value]) => {

@@ -4,7 +4,7 @@ export function EmailAuthFields({ flow, pending, report }) {
       {flow.challenge && (
         <div className="min-w-0 rounded-lg border border-orange-100 bg-orange-50 p-4 text-sm [overflow-wrap:anywhere]">
           <p className="mb-3">
-            Mã xác thực đã gửi tới <strong>{flow.challenge.email}</strong>. Mã có hiệu lực 10 phút.
+            Mã xác thực đã gửi tới <strong>{flow.challenge.email}</strong>. Mã có hiệu lực 1 phút.
           </p>
           <label className="grid gap-2">
             Mã xác thực email
@@ -20,18 +20,21 @@ export function EmailAuthFields({ flow, pending, report }) {
           </label>
           <button
             type="button"
-            className="mt-3 text-auth-orange"
-            disabled={pending}
+            className="mt-3 text-auth-orange disabled:cursor-not-allowed"
+            disabled={pending || flow.resending || flow.resendSeconds > 0}
             onClick={async () => {
               try {
-                await flow.resend();
-                report("Đã gửi mã mới. Vui lòng kiểm tra email.");
+                if (await flow.resend()) report("Đã gửi mã mới. Vui lòng kiểm tra email.");
               } catch (error) {
                 report(error.message);
               }
             }}
           >
-            Gửi lại mã (sau 60 giây)
+            {flow.resending
+              ? "Đang gửi mã…"
+              : flow.resendSeconds > 0
+                ? `Gửi lại mã (sau ${flow.resendSeconds} giây)`
+                : "Gửi lại mã"}
           </button>
         </div>
       )}

@@ -1,36 +1,5 @@
 import { useRef, useState } from "react";
-function inline(text) {
-  return text
-    .split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g)
-    .map((part, index) =>
-      part.startsWith("**") ? (
-        <strong key={index}>{part.slice(2, -2)}</strong>
-      ) : part.startsWith("*") ? (
-        <em key={index}>{part.slice(1, -1)}</em>
-      ) : part.startsWith("`") ? (
-        <code key={index}>{part.slice(1, -1)}</code>
-      ) : (
-        part
-      ),
-    );
-}
-function Preview({ value }) {
-  return value
-    .split("\n")
-    .map((line, index) =>
-      line.startsWith("### ") ? (
-        <h4 key={index}>{inline(line.slice(4))}</h4>
-      ) : line.startsWith("## ") ? (
-        <h3 key={index}>{inline(line.slice(3))}</h3>
-      ) : line.startsWith("- ") ? (
-        <p key={index}>• {inline(line.slice(2))}</p>
-      ) : line.startsWith("> ") ? (
-        <blockquote key={index}>{inline(line.slice(2))}</blockquote>
-      ) : (
-        <p key={index}>{inline(line || "\u00a0")}</p>
-      ),
-    );
-}
+import { RecruitmentContent } from "@/shared/ui/recruitment-content";
 export function MarkdownEditor({ label, value, onChange }) {
   const [preview, setPreview] = useState(false);
   const input = useRef(null);
@@ -58,6 +27,7 @@ export function MarkdownEditor({ label, value, onChange }) {
         {[
           ["B", "**", "**"],
           ["I", "*", "*"],
+          ["U", "<u>", "</u>"],
           ["H2", "\n## "],
           ["H3", "\n### "],
           ["•", "\n- "],
@@ -79,7 +49,7 @@ export function MarkdownEditor({ label, value, onChange }) {
       </div>
       {preview ? (
         <div className="cp-markdown-preview" aria-label={`Xem trước ${label}`}>
-          <Preview value={value} />
+          <RecruitmentContent content={value} />
         </div>
       ) : (
         <textarea

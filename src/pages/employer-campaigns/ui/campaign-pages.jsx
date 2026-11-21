@@ -593,7 +593,9 @@ function CampaignEditor({ account, id }) {
         value={document[name]}
         onChange={(event) => patch(name, event.target.value)}
       >
-        <option value="">Chọn {label.toLowerCase()}</option>
+        <option value="" disabled hidden>
+          Chọn {label}
+        </option>
         {items.map((item) => (
           <option key={item.id} value={item.id}>
             {item.name}

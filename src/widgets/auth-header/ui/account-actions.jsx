@@ -200,9 +200,9 @@ function AccountActionsContent({ role, accountAvatar, accountEmail, signOut, use
               <DropdownMenu.Separator className="header-account-separator" />
               {role === "employer" ? (
                 <DropdownMenu.Item asChild>
-                  <Link to="/employer/company" className="header-account-menu-item">
-                    <Building />
-                    Hồ sơ doanh nghiệp
+                  <Link to="/employer/account" className="header-account-menu-item">
+                    <UserRound />
+                    Tài khoản
                   </Link>
                 </DropdownMenu.Item>
               ) : (

@@ -708,7 +708,7 @@ function CandidateDetail({ item, campaignId, refreshVersion, close, toggle, busy
           {item.accountId && (
             <Link
               className="td-primary"
-              to={`/employer/messages?account=${encodeURIComponent(item.accountId)}`}
+              to={`/messages?account=${encodeURIComponent(item.accountId)}`}
             >
               <MessageCircle />
               Nhắn tin

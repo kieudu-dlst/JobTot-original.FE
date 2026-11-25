@@ -1,4 +1,5 @@
-import { CalendarDays, MapPin, BriefcaseBusiness } from "lucide-react";
+import { CalendarDays, MapPin, BriefcaseBusiness, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/shared/ui/dialog";
 import { mediaUrl } from "@/shared/lib/media-url";
@@ -46,6 +47,15 @@ export function ApplicantDetail({ item, close, open }) {
           </div>
         </div>
         <div className="td-detail-toolbar">
+          {profile.accountId && (
+            <Link
+              className="er-outline"
+              to={`/messages?account=${encodeURIComponent(profile.accountId)}`}
+            >
+              <MessageCircle />
+              Nhắn tin
+            </Link>
+          )}
           {item.applicationStatus && (
             <span className="er-status">
               {applicationStatuses[item.applicationStatus] || item.applicationStatus}

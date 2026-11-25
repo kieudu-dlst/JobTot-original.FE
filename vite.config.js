@@ -4,8 +4,12 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+  // Keep generated optimizer files separate from the legacy cache tracked in Git.
+  cacheDir: ".cache/vite",
   plugins: [react(), tailwindcss()],
   server: {
+    port: 5173,
+    strictPort: true,
     proxy: {
       "/api": { target: "http://localhost:5049", changeOrigin: false, ws: true },
       "/uploads/companies": { target: "http://localhost:5049", changeOrigin: false },

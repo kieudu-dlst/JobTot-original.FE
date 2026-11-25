@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { EmployerDashboardContext } from "@/shared/lib/employer-dashboard-context";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { BrandLogo } from "@/shared/ui/brand-logo";
@@ -18,6 +20,8 @@ const employerLinks = [
 ];
 
 export function AuthFooter() {
+  const dashboard = useContext(EmployerDashboardContext);
+  if (dashboard) return null;
   return (
     <footer className="site-footer min-h-[430px] bg-auth-surface-footer text-auth-text-footer">
       <div className="mx-auto max-w-[1284px] px-[34px] pt-16 pb-12 max-[700px]:px-5 max-[700px]:pt-10 max-[700px]:pb-8">

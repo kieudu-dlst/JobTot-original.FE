@@ -42,7 +42,7 @@ export function createChatSocket(
       if (stopped) return;
       const base = baseUrl.replace(/\/$/, "");
       const url = new URL(
-        `${base}/api/${employer ? "employer" : "candidate"}/messages/socket`,
+        `${base}/api/messages/socket`,
         window.location.origin,
       );
       url.protocol = url.protocol === "https:" ? "wss:" : "ws:";

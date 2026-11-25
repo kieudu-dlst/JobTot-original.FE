@@ -63,8 +63,7 @@ export function AccountChat({ session, employer }) {
     conversations.find((c) => c.id === activeId) ||
     (contactConversation?.id === activeId ? contactConversation : null);
   useEffect(() => {
-    if ((!recruiterEmail && !companyId && !contactAccountId) || (employer && !contactAccountId))
-      return;
+    if (!recruiterEmail && !companyId && !contactAccountId) return;
     const controller = new AbortController();
     const timer = setTimeout(async () => {
       try {

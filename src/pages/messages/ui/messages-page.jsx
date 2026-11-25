@@ -1,22 +1,24 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 import { BellRing, LockKeyhole, LogIn } from "lucide-react";
 import { MessageCircle, ArrowUpRight, ShieldCheck } from "lucide-react";
 import { AuthHeader, EmployerHeader } from "@/widgets/auth-header";
 import { AuthFooter } from "@/widgets/auth-footer";
 import { PageBreadcrumb } from "@/shared/ui/page-breadcrumb";
+import { Select } from "@/shared/ui/select";
 import { useCandidateSession, useEmployerSession } from "@/features/authenticate";
 import { AccountChat } from "./account-chat";
 import "./messages.css";
 
-export function MessagesPage({ employer = false }) {
+export function MessagesPage() {
   const candidate = useCandidateSession(),
     recruiter = useEmployerSession();
   const location = useLocation();
-  const contactParams = new URLSearchParams(location.search);
-  const contactingHr = contactParams.has("hr") || contactParams.has("company");
-  const useEmployer = employer || (!contactingHr && !candidate.account && !!recruiter.account);
+  const [selectedRole, setSelectedRole] = useState("candidate");
+  const employerDashboard = location.pathname.startsWith("/employer/");
+  const useEmployer = employerDashboard || (!!recruiter.account && (!candidate.account || selectedRole === "employer"));
   const session = useEmployer ? recruiter : candidate;
-  if (session.loading || (!employer && (candidate.loading || recruiter.loading)))
+  if (candidate.loading || recruiter.loading)
     return (
       <div className="messages-page font-roboto">
         {useEmployer ? <EmployerHeader loading /> : <AuthHeader loading />}
@@ -29,11 +31,22 @@ export function MessagesPage({ employer = false }) {
     );
   if (!session.account) return <MessagesGuest employer={useEmployer} />;
   return (
-    <AccountChat
-      key={`${useEmployer}-${session.account.id}`}
-      session={session}
-      employer={useEmployer}
-    />
+    <>
+      {!employerDashboard && candidate.account && recruiter.account && (
+        <label className="page-container">
+          Chat bằng tài khoản
+          <Select value={selectedRole} onChange={(event) => setSelectedRole(event.target.value)}>
+            <option value="candidate">{candidate.account.fullName} (Ứng viên)</option>
+            <option value="employer">{recruiter.account.fullName} (Nhà tuyển dụng)</option>
+          </Select>
+        </label>
+      )}
+      <AccountChat
+        key={`${useEmployer}-${session.account.id}`}
+        session={session}
+        employer={useEmployer}
+      />
+    </>
   );
 }
 function MessagesGuest({ employer }) {

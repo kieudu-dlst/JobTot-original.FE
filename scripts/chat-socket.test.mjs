@@ -41,6 +41,22 @@ class Socket {
   }
 }
 const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
+test("employers connect to the same chat endpoint and disconnect on logout", async () => {
+  const client = createChatSocket(true, {
+    WebSocketImpl: Socket,
+    request: async () => ({ ok: true, json: async () => ({ ticket: "employer-ticket" }) }),
+  });
+  try {
+    client.start();
+    await tick();
+    const socket = Socket.instances.at(-1);
+    assert.equal(new URL(socket.url).pathname, "/api/messages/socket");
+    window.dispatchEvent(new Event("employer-session-ended"));
+    assert.equal(socket.readyState, 3);
+  } finally {
+    client.stop();
+  }
+});
 test("one connection multiplexes commands, dispatches server events and keeps stable message IDs", async () => {
   let tickets = 0;
   const client = createChatSocket(false, {
@@ -64,6 +80,7 @@ test("one connection multiplexes commands, dispatches server events and keeps st
   const socket = Socket.instances.at(-1);
   assert.equal(new URL(socket.url).searchParams.get("ticket"), "one-use");
   assert.equal(new URL(socket.url).protocol, "ws:");
+  assert.equal(new URL(socket.url).pathname, "/api/messages/socket");
   socket.onmessage({ data: JSON.stringify({ type: "message", conversationId: "conversation" }) });
   assert.ok(events.some((e) => e.type === "message"));
   const pending = client.invoke("read", "conversation", { messageIds: [1] });

@@ -65,7 +65,11 @@ export const candidateAuth = {
   requestEmailCode: (email) => post("/email/request", { email }),
   verifyEmailCode: (values) => post("/email/verify", values),
   changeTemporaryPassword: (values) => post("/email/change-temporary-password", values),
-  me: (signal) => request("/me", { signal }, true),
+  me: async (signal) => {
+    // Guests have no session to restore; /me requires a bearer token.
+    if (!readTokens()) return null;
+    return request("/me", { signal }, true);
+  },
   login: (values) => authenticate("/login", values),
   register: (values) => authenticate("/register", values),
   logout: async () => {

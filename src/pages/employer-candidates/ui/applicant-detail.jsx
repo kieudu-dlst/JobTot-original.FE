@@ -50,7 +50,7 @@ export function ApplicantDetail({ item, close, open }) {
           {profile.accountId && (
             <Link
               className="er-outline"
-              to={`/employer/messages?account=${encodeURIComponent(profile.accountId)}`}
+              to={`/messages?account=${encodeURIComponent(profile.accountId)}`}
             >
               <MessageCircle />
               Nhắn tin

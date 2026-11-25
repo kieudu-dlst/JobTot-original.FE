@@ -149,7 +149,7 @@ export function EmployerCredentialsForm({ mode, external }) {
           ? "Đã tạo tài khoản nhà tuyển dụng. Doanh nghiệp đang chờ xác minh."
           : "Đăng nhập thành công.",
       );
-      navigate(external?.returnTo || authReturnPath(search, "/employer/account"), {
+      navigate(external?.returnTo || authReturnPath(search, "/employer"), {
         replace: true,
       });
     } catch (failure) {

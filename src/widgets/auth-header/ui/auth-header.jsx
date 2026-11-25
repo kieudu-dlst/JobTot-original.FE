@@ -25,7 +25,7 @@ export function AuthHeader({
           {navigation || (
             <>
               <JobsMenu />
-              <ToolsMenu />
+              <ToolsMenu /><Link to="/ai/career-search" style={{ color: "#7c3aed", fontWeight: 700 }}><span aria-hidden="true">✦</span> Trợ lý AI</Link>
             </>
           )}
         </nav>

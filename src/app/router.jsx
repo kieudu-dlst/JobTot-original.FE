@@ -1,3 +1,5 @@
+import { EmployerDashboardLayout } from "./employer-dashboard/employer-dashboard";
+import { EmployerDashboardPage } from "@/pages/employer-dashboard";
 import { createBrowserRouter, Link, Navigate } from "react-router-dom";
 import { HomePage } from "@/pages/home";
 import { JobsPage } from "@/pages/jobs";
@@ -18,6 +20,7 @@ import { ProfilePage } from "@/pages/profile";
 import { CompaniesPage, CompanyDetailPage } from "@/pages/companies";
 import { TopIndustriesPage } from "@/pages/top-industries";
 import { ToolsPage } from "@/pages/tools";
+import { CareerSearchPage } from "@/pages/ai-career-search";
 import { SalaryPage } from "@/pages/salary";
 import { IncomeTaxPage } from "@/pages/income-tax";
 import { UnemploymentPage } from "@/pages/unemployment";
@@ -33,30 +36,39 @@ import {
 import { PageBreadcrumb } from "@/shared/ui/page-breadcrumb";
 
 export const router = createBrowserRouter([
+  {
+    element: <EmployerDashboardLayout />,
+    children: [
+      { path: "/employer", element: <EmployerDashboardPage /> },
+      { path: "/employer/assistant", element: <CareerSearchPage /> },
+      { path: "/employer/account", element: <EmployerAccountPage /> },
+      { path: "/employer/company", element: <EmployerCompanyPage /> },
+      { path: "/employer/campaigns", element: <CampaignListPage /> },
+      { path: "/employer/campaigns/new", element: <CampaignEditPage /> },
+      { path: "/employer/campaigns/:id/edit", element: <CampaignEditPage /> },
+      // Saved-profile management belongs to talent discovery; preserve its existing URL and actions.
+      { path: "/employer/talents", element: <EmployerCandidatesPage view="talents" /> },
+      { path: "/employer/discover", element: <EmployerDiscoveryPage /> },
+      { path: "/employer/candidates", element: <EmployerCandidatesPage view="applications" /> },
+      { path: "/employer/interviews", element: <EmployerCandidatesPage view="interviews" /> },
+      { path: "/employer/messages", element: <MessagesPage /> },
+    ],
+  },
   { path: "/admin/career-articles", element: <AdminArticlesPage /> },
   { path: "/career-articles", element: <ArticlesPage /> },
   { path: "/career-articles/:id", element: <ArticlesPage /> },
   { path: "/", element: <HomePage /> },
   { path: "/register", element: <AuthPage mode="register" /> },
   { path: "/auth/external", element: <ExternalAuthPage /> },
-  { path: "/employer/account", element: <EmployerAccountPage /> },
-  { path: "/employer/company", element: <EmployerCompanyPage /> },
-  { path: "/employer/campaigns", element: <CampaignListPage /> },
-  { path: "/employer/campaigns/new", element: <CampaignEditPage /> },
-  { path: "/employer/campaigns/:id/edit", element: <CampaignEditPage /> },
-  // Saved-profile management belongs to talent discovery; preserve its existing URL and actions.
-  { path: "/employer/talents", element: <EmployerCandidatesPage view="talents" /> },
-  { path: "/employer/discover", element: <EmployerDiscoveryPage /> },
-  { path: "/employer/candidates", element: <EmployerCandidatesPage view="applications" /> },
-  { path: "/employer/interviews", element: <EmployerCandidatesPage view="interviews" /> },
   { path: "/messages", element: <MessagesPage /> },
-  { path: "/employer/messages", element: <MessagesPage employer /> },
+
   { path: "/login", element: <AuthPage mode="login" /> },
   { path: "/reset-password", element: <ResetPasswordPage /> },
   { path: "/profile", element: <ProfilePage /> },
   { path: "/companies", element: <CompaniesPage /> },
   { path: "/top-industries", element: <TopIndustriesPage /> },
   { path: "/tools", element: <ToolsPage /> },
+  { path: "/ai/career-search", element: <CareerSearchPage /> },
   { path: "/tools/gross-net", element: <SalaryPage /> },
   { path: "/tools/income-tax", element: <IncomeTaxPage /> },
   { path: "/tools/unemployment-insurance", element: <UnemploymentPage /> },

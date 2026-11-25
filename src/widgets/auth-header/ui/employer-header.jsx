@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { EmployerDashboardContext } from "@/shared/lib/employer-dashboard-context";
 import { Link, useLocation } from "react-router-dom";
 import { FileText, Megaphone, UsersRound } from "lucide-react";
 import { AuthHeader } from "./auth-header";
@@ -8,6 +10,10 @@ function Navigation() {
   const active = employerArea(pathname);
   return (
     <>
+      <Link to="/ai/career-search?role=employer" style={{ color: "#7c3aed", fontWeight: 700 }}>
+        <FileText />
+        Trợ lý AI
+      </Link>
       <Link
         to="/employer/campaigns"
         aria-current={active === "campaigns" ? "page" : undefined}
@@ -36,6 +42,8 @@ function Navigation() {
   );
 }
 export function EmployerHeader({ userName, loading }) {
+  const dashboard = useContext(EmployerDashboardContext);
+  if (dashboard) return null;
   return (
     <AuthHeader
       authRole="employer"

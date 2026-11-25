@@ -82,19 +82,19 @@ async function refreshTokens(failedAccessToken) {
 export async function employerFetch(
   path,
   options = {},
-  { authenticated = true, retry = true } = {},
+  { authenticated = true, retry = true, apiRoot = false } = {},
 ) {
   const tokens = authenticated ? readTokens() : null;
   const headers = new Headers(options.headers);
   if (tokens) headers.set("Authorization", `Bearer ${tokens.accessToken}`);
-  const response = await fetch(`${base}/api/employer/${path}`, {
+  const response = await fetch(`${base}/api/${apiRoot ? "" : "employer/"}${path}`, {
     ...options,
     credentials: "omit",
     headers,
   });
   if (authenticated && retry && response.status === 401 && tokens) {
     if (await refreshTokens(tokens.accessToken)) {
-      const result = await employerFetch(path, options, { authenticated, retry: false });
+      const result = await employerFetch(path, options, { authenticated, retry: false, apiRoot });
       if (result.status === 401) clearTokens();
       return result;
     }

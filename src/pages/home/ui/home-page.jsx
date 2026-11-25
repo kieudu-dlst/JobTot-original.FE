@@ -21,6 +21,7 @@ import { CareerResources } from "@/widgets/career-resources";
 import { useCandidateSession } from "@/features/authenticate";
 import { SaveJobButton } from "@/features/save-job";
 import { companiesApi, CompanyCard } from "@/entities/company";
+import { HomePosters } from "./home-posters";
 import "./home.css";
 
 const tabs = [
@@ -173,24 +174,8 @@ function HomeContent() {
       <title>Job Tốt | Tìm việc làm, kết nối doanh nghiệp và phát triển sự nghiệp</title>
       <AuthHeader userName={account?.fullName} loading={loading} />
       <main className="page-container">
-        <div className="home-discovery">
-          <section className="home-hero" aria-labelledby="home-heading">
-            <p className="home-ai">
-              <Sparkles />
-              Cơ hội mới. Bước tiến mới.
-            </p>
-            <h1 id="home-heading">
-              Tìm việc bạn yêu thích,{" "}
-              <span className="home-hero-emphasis">bắt nhịp tương lai.</span>
-            </h1>
-            <p className="home-description">
-              Khám phá công việc từ{" "}
-              {overview
-                ? `${count(overview.stats.totalCompanies)} nhà tuyển dụng`
-                : "các nhà tuyển dụng"}
-              , tìm nơi phù hợp với bạn và tự tin cho bước tiến tiếp theo.
-            </p>
-          </section>
+        <div className="home-discovery home-poster-discovery" style={{ display: "flex", flexDirection: "column" }}>
+          <HomePosters />
           <form
             className="company-search home-search"
             onSubmit={(event) => {
@@ -253,39 +238,7 @@ function HomeContent() {
               Tìm việc ngay
             </button>
           </form>
-          <aside className="home-opportunity" aria-label="Khám phá cơ hội nghề nghiệp">
-            <div className="home-opportunity-heading">
-              <span>
-                <Sparkles />
-                HÀNH TRÌNH CỦA BẠN
-              </span>
-              <ArrowUpRight aria-hidden="true" />
-            </div>
-            <p className="home-opportunity-title">
-              Một bước mới,
-              <br />
-              nhiều cơ hội hơn.
-            </p>
-            <div className="home-opportunity-stats">
-              <Link to="/jobs">
-                <BriefcaseBusiness aria-hidden="true" />
-                <strong>{overview ? count(overview.stats.openJobs) : "Tìm việc"}</strong>
-                <span>{overview ? "việc làm đang mở" : "Khám phá việc làm"}</span>
-              </Link>
-              <Link to="/companies">
-                <Building2 aria-hidden="true" />
-                <strong>{overview ? count(overview.stats.totalCompanies) : "Kết nối"}</strong>
-                <span>nhà tuyển dụng</span>
-              </Link>
-            </div>
-            <Link className="home-opportunity-cv" to="/cv-templates">
-              <span>
-                <FileText aria-hidden="true" />
-                Làm mới CV, sẵn sàng tỏa sáng
-              </span>
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          </aside>
+
         </div>
         <section className="company-featured" aria-labelledby="home-companies">
           <div className="company-section-heading">

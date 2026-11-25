@@ -21,6 +21,7 @@ const jobs = [
   ["/top-industries", "Top ngành nghề", BriefcaseBusiness],
 ];
 const tools = [
+  ["/ai/career-search?role=candidate", "Trợ lý AI", Wrench],
   ["/cv-templates", "Mẫu CV", FileText],
   ["/tools/gross-net", "Tính lương", Calculator],
   ["/tools/income-tax", "Tính thuế TNCN", ReceiptText],

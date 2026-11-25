@@ -8,7 +8,8 @@ export function BrandLogo({ footer = false }) {
       className={`inline-flex shrink-0 items-center gap-2.5 no-underline max-[700px]:gap-[7px] ${footer ? "mb-3.5 text-white" : ""}`}
       aria-label="Job Tốt — Trang chủ"
     >
-      <span className="relative grid size-10 place-items-center rounded-xl bg-auth-orange text-white shadow-[0_3px_6px_var(--color-auth-shadow-brand)] max-[700px]:size-9">
+      {footer ? (
+<span className="relative grid size-10 place-items-center rounded-xl bg-auth-orange text-white shadow-[0_3px_6px_var(--color-auth-shadow-brand)] max-[700px]:size-9">
         <BriefcaseBusiness
           data-brand-icon="true"
           aria-hidden="true"
@@ -20,6 +21,9 @@ export function BrandLogo({ footer = false }) {
           className="absolute top-[15px] left-3 size-[15px] fill-none stroke-auth-orange stroke-[3] max-[700px]:top-[13px] max-[700px]:left-2.5"
         />
       </span>
+      ) : (
+        <img src="/images/mascot/logo.png" alt="" width="48" height="48" className="size-12 shrink-0 object-contain max-[700px]:size-10" />
+      )}
       <span>
         <span
           className={`flex items-baseline leading-[23px] tracking-[-0.7px] ${footer ? "text-xl font-bold" : "text-xl font-extrabold max-[700px]:text-lg max-[380px]:text-base"}`}
